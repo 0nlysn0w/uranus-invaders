@@ -8,6 +8,8 @@ speed = [2, 2]
 black = [0, 0, 0]
 white = [255, 255, 255]
 
+running = True
+
 clock = pygame.time.Clock()
 
 screen = pygame.display.set_mode(size)
@@ -19,7 +21,16 @@ pygame.display.set_caption("Uranus invaders")
 
 screen.fill(white)
 
-while True:
+while running:
     screen.fill((random.randint(0,255), random.randint(0,255), random.randint(0,255)))
     pygame.display.update()
     clock.tick(15)
+    for i in pygame.event.get():
+        print(i);
+        print("Type:"  + str(i.type))
+        if hasattr(i, "key"):
+            print("key:"  + str(getattr(i, "key")))
+
+        if i.type == pygame.QUIT or (hasattr(i, "key") and getattr(i, "key") == 27):
+            running = False
+            pygame.quit()
