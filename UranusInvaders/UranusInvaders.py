@@ -1,27 +1,25 @@
 #this doesn't do anything yet but if it doesn't return any errors it should work i think - Ramon
 
-import sys, pygame
+import sys, pygame, random
 pygame.init()
 
 size = width, height = 320, 240
 speed = [2, 2]
-black = 0, 0, 0
+black = [0, 0, 0]
+white = [255, 255, 255]
+
+clock = pygame.time.Clock()
 
 screen = pygame.display.set_mode(size)
 
-ball = pygame.image.load("Assets/ball.png")
-ballrect = ball.get_rect()
+myfont = pygame.font.SysFont("monospace", 15)
+pygame.display.set_icon(pygame.image.load("Assets/ball.png"))
+pygame.display.set_caption("Uranus invaders")
 
-while 1:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT: sys.exit()
 
-    ballrect = ballrect.move(speed)
-    if ballrect.left < 0 or ballrect.right > width:
-        speed[0] = -speed[0]
-    if ballrect.top < 0 or ballrect.bottom > height:
-        speed[1] = -speed[1]
+screen.fill(white)
 
-    screen.fill(black)
-    screen.blit(ball, ballrect)
-    pygame.display.flip()
+while True:
+    screen.fill((random.randint(0,255), random.randint(0,255), random.randint(0,255)))
+    pygame.display.update()
+    clock.tick(15)
