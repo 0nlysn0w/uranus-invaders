@@ -16,7 +16,8 @@ myfont = pygame.font.SysFont("monospace", 15)
 pygame.display.set_icon(pygame.image.load("Assets/ball.png"))
 pygame.display.set_caption("Uranus invaders")
 
-
+global state
+state = "main"
 
 class MenuItem(pygame.font.Font):
     def __init__(self, text, redir, font=None, font_size=30,
@@ -70,6 +71,7 @@ class GameMenu() :
 
     def run(self) :
         running = True
+        global state
         while running:
             self.screen.fill((0, 0, 0))
             for item in self.items:
@@ -80,19 +82,21 @@ class GameMenu() :
                     if pygame.mouse.get_pressed()[0]:
                         print("left clicked")
                         print(item.redir)
-                        if item.redir == "quit":
-                            pygame.quit()
-                            quit()
+                        state = item.redir
+                        running = False
+
                 else:
                     item.set_font_color((255, 255, 255))
                     item.set_italic(False)
                 self.screen.blit(item.label, item.position)
 
             for i in pygame.event.get():
-
-                if i.type == pygame.QUIT or (hasattr(i, "key") and getattr(i, "key") == 27):
+                if state == "quit":
+                    running = False
+                elif i.type == pygame.QUIT or (hasattr(i, "key") and getattr(i, "key") == 27):
                     running = False
                     pygame.quit()
+                    quit()
                 else:
                     #sets the fps and updates the game screen.
                     pygame.display.update()
@@ -111,3 +115,22 @@ if __name__ == "__main__":
     pygame.display.set_caption('Game Menu')
     gm = GameMenu(screen, menuItems, menuRedirect)
     gm.run()
+    print("game menu has exited the init")
+    while True:
+        if state == "tim":
+            print(state)
+        elif state == "ramon":
+            print(state)
+        elif state == "joost":
+            print(state)
+        elif state == "jurrian":
+            print(state)
+        elif state == "floris":
+            print(state)
+        elif state == "kelvin":
+            print(state)
+        elif state == "main":
+            gm.run()
+        else:
+            pygame.quit()
+            quit()
