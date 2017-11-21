@@ -1,6 +1,7 @@
 #this doesn't do anything yet but if it doesn't return any errors it should work i think - Ramon
 
-import sys, pygame, random, Asteroids
+import sys, pygame, random
+from Asteroids import Asteroids
 pygame.init()
 
 size = width, height = 800, 600
@@ -126,7 +127,7 @@ if __name__ == "__main__":
             print(state)
             state = "main"
         elif state == "ramon":
-            asteroids.Asteroids.run()
+            Asteroids.run(pygame, screen)
             print(state)
             state = "main"
         elif state == "joost":

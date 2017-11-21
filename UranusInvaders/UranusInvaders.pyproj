@@ -24,6 +24,9 @@
     <Compile Include="Asteroids.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BaseRenderer.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="UranusInvaders.py" />
   </ItemGroup>
   <ItemGroup>
