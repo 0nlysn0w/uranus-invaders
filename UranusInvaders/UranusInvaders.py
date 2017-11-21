@@ -1,6 +1,6 @@
 #this doesn't do anything yet but if it doesn't return any errors it should work i think - Ramon
 
-import sys, pygame, random
+import sys, pygame, random, asteroids
 pygame.init()
 
 size = width, height = 800, 600
@@ -116,23 +116,28 @@ if __name__ == "__main__":
     gm.run()
     print("game menu has exited the init")
     while True:
+        #sets state to main after the called function has finished to return you to the main menu
         if state == "tim":
             print(state)
+            state = "main"
         elif state == "ramon":
+            asteroids.Asteroids.run()
             print(state)
+            state = "main"
         elif state == "joost":
             print(state)
+            state = "main"
         elif state == "jurian":
             print(state)
+            state = "main"
         elif state == "floris":
             print(state)
+            state = "main"
         elif state == "kelvin":
             print(state)
+            state = "main"
         elif state == "main":
             gm.run()
         else:
             pygame.quit()
             quit()
-        # Sets the state back to main because if you return from the minigame you need to return main menu the if statement is there because if you are in this while loop it'll reset it to 'main' after you click quit thus not quitting the game but being stuck in an infinite loop
-        if state != "quit":
-            state = "main"
