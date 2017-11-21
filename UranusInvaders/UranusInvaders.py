@@ -134,3 +134,5 @@ if __name__ == "__main__":
         else:
             pygame.quit()
             quit()
+        # Sets the state back to main because if you return from the minigame you need to return main menu
+        state = "main"
