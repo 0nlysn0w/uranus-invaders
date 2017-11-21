@@ -1,6 +1,6 @@
 #this doesn't do anything yet but if it doesn't return any errors it should work i think - Ramon
 
-import sys, pygame, random, asteroids
+import sys, pygame, random, Asteroids
 pygame.init()
 
 size = width, height = 800, 600
@@ -109,12 +109,17 @@ class GameMenu() :
 if __name__ == "__main__":
     # Creating the screen
     screen = pygame.display.set_mode(size)
+
+    #The names of the menu items, if you change this the text on screen changes
     menuItems = ("Space Invaders", "Asteroids", "Alien Slayer", "Planetary Survival", "Alien space traffic", "Space Race", "Quit")
+
+    #The name of the state which determines which minigame it'll load
     menuRedirect = ("tim", "ramon", "floris", "jurian", "kelvin", "joost", "quit")
-    pygame.display.set_caption('Game Menu')
+
+    #initialize the game menu, which you only need to do one as it is continously used
     gm = GameMenu(screen, menuItems, menuRedirect)
-    gm.run()
-    print("game menu has exited the init")
+    
+    #the true is because if the state is quit python quits
     while True:
         #sets state to main after the called function has finished to return you to the main menu
         if state == "tim":
@@ -139,5 +144,6 @@ if __name__ == "__main__":
         elif state == "main":
             gm.run()
         else:
+            #if the state is quit or anything that isn't specified above the game will quit
             pygame.quit()
             quit()
