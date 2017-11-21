@@ -95,8 +95,7 @@ class GameMenu() :
                     running = False
                 elif i.type == pygame.QUIT or (hasattr(i, "key") and getattr(i, "key") == 27):
                     running = False
-                    pygame.quit()
-                    quit()
+                    state = "quit"
                 else:
                     #sets the fps and updates the game screen.
                     pygame.display.update()
@@ -110,8 +109,8 @@ class GameMenu() :
 if __name__ == "__main__":
     # Creating the screen
     screen = pygame.display.set_mode(size)
-    menuItems = ("Space Invaders", "Asteroids", "Quit")
-    menuRedirect = ("tim", "ramon", "quit")
+    menuItems = ("Space Invaders", "Asteroids", "Alien Slayer", "Planetary Survival", "Alien space traffic", "Space Race", "Quit")
+    menuRedirect = ("tim", "ramon", "floris", "jurian", "kelvin", "joost", "quit")
     pygame.display.set_caption('Game Menu')
     gm = GameMenu(screen, menuItems, menuRedirect)
     gm.run()
@@ -123,7 +122,7 @@ if __name__ == "__main__":
             print(state)
         elif state == "joost":
             print(state)
-        elif state == "jurrian":
+        elif state == "jurian":
             print(state)
         elif state == "floris":
             print(state)
@@ -134,5 +133,6 @@ if __name__ == "__main__":
         else:
             pygame.quit()
             quit()
-        # Sets the state back to main because if you return from the minigame you need to return main menu
-        state = "main"
+        # Sets the state back to main because if you return from the minigame you need to return main menu the if statement is there because if you are in this while loop it'll reset it to 'main' after you click quit thus not quitting the game but being stuck in an infinite loop
+        if state != "quit":
+            state = "main"
