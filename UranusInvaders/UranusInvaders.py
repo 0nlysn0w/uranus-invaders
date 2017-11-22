@@ -2,6 +2,7 @@
 
 import sys, pygame, random
 from Asteroids import Asteroids
+from BaseRenderer import BaseRenderer
 pygame.init()
 
 size = width, height = 800, 600
@@ -119,7 +120,7 @@ if __name__ == "__main__":
 
     #initialize the game menu, which you only need to do one as it is continously used
     gm = GameMenu(screen, menuItems, menuRedirect)
-    
+    baseRenderer = BaseRenderer(pygame, screen)
     #the true is because if the state is quit python quits
     while True:
         #sets state to main after the called function has finished to return you to the main menu
@@ -127,7 +128,7 @@ if __name__ == "__main__":
             print(state)
             state = "main"
         elif state == "ramon":
-            Asteroids.run(pygame, screen)
+            baseRenderer.run("Asteroids", "Asteroids")
             print(state)
             state = "main"
         elif state == "joost":
