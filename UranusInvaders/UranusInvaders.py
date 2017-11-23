@@ -5,14 +5,6 @@ from Asteroids import Asteroids
 from BaseRenderer import BaseRenderer
 pygame.init()
 
-size = width, height = 800, 600
-speed = [2, 2]
-black = [0, 0, 0]
-white = [255, 255, 255]
-
-clock = pygame.time.Clock()
-
-screen = pygame.display.set_mode(size)
 
 myfont = pygame.font.SysFont("monospace", 15)
 pygame.display.set_icon(pygame.image.load("Assets/ball.png"))
@@ -95,7 +87,7 @@ class GameMenu() :
             for i in pygame.event.get():
                 if state == "quit":
                     running = False
-                elif i.type == pygame.QUIT or (hasattr(i, "key") and getattr(i, "key") == 27):
+                elif i.type == pygame.QUIT:
                     running = False
                     state = "quit"
                 else:
@@ -110,6 +102,7 @@ class GameMenu() :
 
 if __name__ == "__main__":
     # Creating the screen
+    size = width, height = 800, 600
     screen = pygame.display.set_mode(size)
 
     #The names of the menu items, if you change this the text on screen changes
