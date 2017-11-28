@@ -137,7 +137,8 @@ if __name__ == "__main__":
             print(state)
             state = "main"
         elif state == "main":
-            gm.run()
+            baseRenderer.run("GameMenu", "GameMenu")
+            #gm.run()
         else:
             #if the state is quit or anything that isn't specified above the game will quit
             pygame.quit()

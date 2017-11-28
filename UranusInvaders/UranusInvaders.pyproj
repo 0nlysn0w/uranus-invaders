@@ -27,6 +27,9 @@
     <Compile Include="BaseRenderer.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GameMenu.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="UranusInvaders.py" />
   </ItemGroup>
   <ItemGroup>
