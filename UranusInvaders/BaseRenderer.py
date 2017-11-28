@@ -8,13 +8,13 @@ class BaseRenderer():
         self.pyg = pyg
         self.screen = screen
     
-    def run(self, fileName, className, functionName = "run"):
+    def run(self, fileName, className):
         running = True
         global state
 
         model = __import__(fileName)
         classToCall = getattr(model, className)
-        classToCall(self.pyg, self.screen);
+        classCalled = classToCall(self.pyg, self.screen);
         while running:
 
             
@@ -22,10 +22,9 @@ class BaseRenderer():
                 #Sets the screen to standard black
                 self.screen.fill((0, 0, 0))
 
-                #Dynamically runs function from what the user input is
+                #This makes sure the init function works, if you don't want to call the run function, that's your loss
                 
-                methodToCall = getattr(classToCall, functionName)
-                methodToCall(self.pyg, self.screen)
+                classCalled.run()
 
                 if i.type == self.pyg.QUIT or (hasattr(i, "key") and getattr(i, "key") == 27):
                     running = False
