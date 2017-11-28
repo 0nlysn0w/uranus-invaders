@@ -106,7 +106,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(size)
 
     #The names of the menu items, if you change this the text on screen changes
-    menuItems = ("Space Invaders", "Asteroids", "Alien Slayer", "Planetary Survival", "Alien space traffic", "Space Race", "Quit")
+    menuItems = ("Space Invaders", "Asteroids", "Alien Slayer", "Planetary Survival", "Traffic madness on Uranus", "Space Race", "Quit")
 
     #The name of the state which determines which minigame it'll load
     menuRedirect = ("tim", "ramon", "floris", "jurian", "kelvin", "joost", "quit")

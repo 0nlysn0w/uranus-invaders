@@ -11,7 +11,12 @@ class BaseRenderer():
     def run(self, fileName, className, functionName = "run"):
         running = True
         global state
+
+        model = __import__(fileName)
+        classToCall = getattr(model, className)
+        classToCall(self.pyg, self.screen);
         while running:
+
             
             for i in self.pyg.event.get():
                 #Sets the screen to standard black
@@ -19,8 +24,6 @@ class BaseRenderer():
 
                 #Dynamically runs function from what the user input is
                 
-                model = __import__(fileName)
-                classToCall = getattr(model, className)
                 methodToCall = getattr(classToCall, functionName)
                 methodToCall(self.pyg, self.screen)
 
