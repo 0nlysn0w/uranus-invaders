@@ -24,6 +24,7 @@ if __name__ == "__main__":
         #sets state to main after the called function has finished to return you to the main menu
         print("State=" + state)
         if state == "tim":
+            baseRenderer.run("SpaceInvaders", "SpaceInvaders")
             state = "main"
         elif state == "ramon":
             baseRenderer.run("Asteroids", "Asteroids")
