@@ -1,5 +1,4 @@
 import sys
-from Asteroids import Asteroids
 
 class BaseRenderer():
     def __init__(self, pyg, screen):

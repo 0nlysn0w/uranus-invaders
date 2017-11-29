@@ -1,7 +1,6 @@
 #this doesn't do anything yet but if it doesn't return any errors it should work i think - Ramon
 
 import sys, pygame, random
-from Asteroids import Asteroids
 from BaseRenderer import BaseRenderer
 pygame.init()
 
@@ -34,12 +33,14 @@ if __name__ == "__main__":
             print(state)
             state = "main"
         elif state == "jurian":
+            baseRenderer.run("PlanetarySurvival", "PlanetarySurvival")
             print(state)
             state = "main"
         elif state == "floris":
             print(state)
             state = "main"
         elif state == "kelvin":
+            baseRenderer.run("TrafficMadness", "TrafficMadness")
             print(state)
             state = "main"
         elif state == "main":

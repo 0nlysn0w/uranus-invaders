@@ -30,6 +30,10 @@
     <Compile Include="GameMenu.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PlanetarySurvival.py" />
+    <Compile Include="TrafficMadness.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="UranusInvaders.py" />
   </ItemGroup>
   <ItemGroup>
