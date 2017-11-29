@@ -24,7 +24,17 @@ class BaseRenderer():
 
                 #This makes sure the init function works, if you don't want to call the run function, that's your loss
                 
-                classCalled.run()
+                m = classCalled.run()
+                print(m)
+                print(type(m))
+                print(type(m) == str)
+                if type(m) == str:
+                    m,n = m.split("=")
+                    print(m)
+                    print(n)
+                    if m == "return":
+                        print(n)
+                        return n
 
                 if i.type == self.pyg.QUIT or (hasattr(i, "key") and getattr(i, "key") == 27):
                     running = False

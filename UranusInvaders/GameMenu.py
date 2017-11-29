@@ -38,6 +38,7 @@ class GameMenu():
                     print("left clicked")
                     print(item.redir)
                     state = item.redir
+                    return "return=" + state
                     running = False
 
             else:
