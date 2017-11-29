@@ -21,6 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AlienSlayer.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Asteroids.py">
       <SubType>Code</SubType>
     </Compile>
@@ -31,6 +34,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PlanetarySurvival.py" />
+    <Compile Include="SpaceRace.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TrafficMadness.py">
       <SubType>Code</SubType>
     </Compile>

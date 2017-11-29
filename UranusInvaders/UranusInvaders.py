@@ -22,26 +22,23 @@ if __name__ == "__main__":
     #the true is because if the state is quit python quits
     while True:
         #sets state to main after the called function has finished to return you to the main menu
+        print("State=" + state)
         if state == "tim":
-            print(state)
             state = "main"
         elif state == "ramon":
             baseRenderer.run("Asteroids", "Asteroids")
-            print(state)
             state = "main"
         elif state == "joost":
-            print(state)
+            baseRenderer.run("SpaceRace", "SpaceRace")
             state = "main"
         elif state == "jurian":
             baseRenderer.run("PlanetarySurvival", "PlanetarySurvival")
-            print(state)
             state = "main"
         elif state == "floris":
-            print(state)
+            baseRenderer.run("AlienSlayer", "AlienSlayer")
             state = "main"
         elif state == "kelvin":
             baseRenderer.run("TrafficMadness", "TrafficMadness")
-            print(state)
             state = "main"
         elif state == "main":
             state = baseRenderer.run("GameMenu", "GameMenu")
