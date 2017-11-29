@@ -24,15 +24,9 @@ class BaseRenderer():
                 #This makes sure the init function works, if you don't want to call the run function, that's your loss
                 
                 state = classCalled.run()
-                print(state)
-                print(type(state))
-                print(type(state) == str)
                 if type(state) == str:
                     state,value = state.split("=")
-                    print(state)
-                    print(value)
                     if state == "return":
-                        print(value)
                         return value
 
                 if i.type == self.pyg.QUIT or (hasattr(i, "key") and self.pyg.KEYDOWN == i.type and getattr(i, "key") == 27):
