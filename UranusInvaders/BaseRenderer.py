@@ -10,7 +10,6 @@ class BaseRenderer():
     
     def run(self, fileName, className):
         running = True
-        global state
 
         model = __import__(fileName)
         classToCall = getattr(model, className)
@@ -24,21 +23,20 @@ class BaseRenderer():
 
                 #This makes sure the init function works, if you don't want to call the run function, that's your loss
                 
-                m = classCalled.run()
-                print(m)
-                print(type(m))
-                print(type(m) == str)
-                if type(m) == str:
-                    m,n = m.split("=")
-                    print(m)
-                    print(n)
-                    if m == "return":
-                        print(n)
-                        return n
+                state = classCalled.run()
+                print(state)
+                print(type(state))
+                print(type(state) == str)
+                if type(state) == str:
+                    state,value = state.split("=")
+                    print(state)
+                    print(value)
+                    if state == "return":
+                        print(value)
+                        return value
 
-                if i.type == self.pyg.QUIT or (hasattr(i, "key") and getattr(i, "key") == 27):
+                if i.type == self.pyg.QUIT or (hasattr(i, "key") and self.pyg.KEYDOWN == i.type and getattr(i, "key") == 27):
                     running = False
-                    state = "quit"
                     return "quit";
                 else:
                     #sets the fps and updates the game screen.
