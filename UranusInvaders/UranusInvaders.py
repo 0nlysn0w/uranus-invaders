@@ -10,13 +10,14 @@ myfont = pygame.font.SysFont("monospace", 15)
 pygame.display.set_icon(pygame.image.load("Assets/ball.png"))
 pygame.display.set_caption("Uranus invaders")
 
-global state
-state = "main"
 
 if __name__ == "__main__":
     # Creating the screen
     size = width, height = 800, 600
     screen = pygame.display.set_mode(size)
+    
+    #sets the initial value to make sure it runs the main menu
+    state = "main"
 
     baseRenderer = BaseRenderer(pygame, screen)
     #the true is because if the state is quit python quits
