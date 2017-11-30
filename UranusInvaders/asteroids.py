@@ -6,6 +6,7 @@ class Asteroids():
         self.screen = screen
         self.myfont = self.pyg.font.SysFont("monospace", 30)
         self.wheatley = pyg.image.load("Assets/Wheatley.png")
+        self.spaceship = pyg.image.load("Assets/spaceship-basic.png")
 
 
     def run(self):
@@ -13,6 +14,7 @@ class Asteroids():
         label = self.myfont.render("Asteroids!", 1, (255,255,0))
         self.screen.blit(label, (100, 100))
         self.screen.blit(self.wheatley, (300, 100))
+        self.screen.blit(self.spaceship, (500, 300))
         
     def runextracode() :
         print("runextracode")

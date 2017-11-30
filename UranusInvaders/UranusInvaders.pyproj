@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\ball.png" />
+    <Content Include="Assets\spaceship-basic.png" />
+    <Content Include="Assets\Wheatley.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
