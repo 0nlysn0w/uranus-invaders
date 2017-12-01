@@ -16,5 +16,8 @@ class Asteroids():
         self.screen.blit(self.wheatley, (300, 100))
         self.screen.blit(self.spaceship, (500, 300))
         
+        #for i in self.pyg.event.get():
+            
+        
     def runextracode() :
         print("runextracode")
