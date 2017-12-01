@@ -15,18 +15,18 @@ class BaseRenderer():
         classCalled = classToCall(self.pyg, self.screen);
         while running:
 
-            #Sets the screen to standard black
-            self.screen.fill((0, 0, 0))
-
-            #This makes sure the init function works, if you don't want to call the run function, that's your loss
-                
-            state = classCalled.run()
-            if type(state) == str:
-                state,value = state.split("=")
-                if state == "return":
-                    return value
-            
             for i in self.pyg.event.get():
+                #Sets the screen to standard black
+                self.screen.fill((0, 0, 0))
+
+                #This makes sure the init function works, if you don't want to call the run function, that's your loss
+                
+                state = classCalled.run(i)
+                if type(state) == str:
+                    state,value = state.split("=")
+                    if state == "return":
+                        return value
+
                 if i.type == self.pyg.QUIT or (hasattr(i, "key") and self.pyg.KEYDOWN == i.type and getattr(i, "key") == 27):
                     running = False
                     return "quit";

@@ -8,7 +8,7 @@ class AlienSlayer():
         self.wheatley = pyg.image.load("Assets/Wheatley.png")
 
 
-    def run(self):
+    def run(self, event):
         label = self.myfont.render("Alien Slayer!", 1, (255,255,0))
         quit = self.myfont.render("press ESC to go back to the main menu", 1, (255,255,0))
         self.screen.blit(label, (100, 100))

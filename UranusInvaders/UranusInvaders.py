@@ -13,8 +13,9 @@ pygame.display.set_caption("Uranus invaders")
 if __name__ == "__main__":
     # Creating the screen
     size = width, height = 800, 600
-    screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
-    
+    #screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
+    screen = pygame.display.set_mode(size)
+
     #sets the initial value to make sure it runs the main menu
     state = "main"
 

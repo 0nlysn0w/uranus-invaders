@@ -27,7 +27,7 @@ class GameMenu():
             menu_item.set_position(pos_x, pos_y)
             self.items.append(menu_item)
 
-    def run(self):
+    def run(self, event):
         self.screen.fill((0, 0, 0))
         for item in self.items:
             mouseProperties = self.pyg.mouse.get_pos()
