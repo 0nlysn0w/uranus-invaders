@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     #sets the initial value to make sure it runs the main menu
     state = "main"
-
+    pygame.key.set_repeat(1, 10)
     baseRenderer = BaseRenderer(pygame, screen)
     #the true is because if the state is quit python quits
     while True:
