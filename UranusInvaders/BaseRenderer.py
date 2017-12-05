@@ -10,6 +10,8 @@ class BaseRenderer():
     def run(self, fileName, className):
         running = True
 
+        self.pyg.key.set_repeat(1, 10)
+
         model = __import__(fileName)
         classToCall = getattr(model, className)
         classCalled = classToCall(self.pyg, self.screen);
@@ -28,6 +30,8 @@ class BaseRenderer():
                         return value
 
                 if i.type == self.pyg.QUIT or (hasattr(i, "key") and self.pyg.KEYDOWN == i.type and getattr(i, "key") == 27):
+                    self.pyg.key.set_repeat(0, 10)
+
                     running = False
                     return "quit";
                 else:

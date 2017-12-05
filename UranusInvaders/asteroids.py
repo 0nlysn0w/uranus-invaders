@@ -1,4 +1,3 @@
-
 class Asteroids():
     def __init__(self, pyg, screen):
         print("init asteriods")
@@ -13,9 +12,7 @@ class Asteroids():
         self.spaceshipY = self.height/2
 
 
-
     def run(self, event):
-        #self.pyg.draw.rect(self.screen, (255, 0, 0), [55,50,800,800], 0)
         label = self.myfont.render("Asteroids!", 1, (255,255,0))
         self.screen.blit(label, (100, 100))
         self.screen.blit(self.wheatley, (300, 100))
@@ -32,7 +29,20 @@ class Asteroids():
 
         if keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]:
            self.spaceshipY += 5
+        
+
+        #Makes sure the spaceship can't leave the screen
+        self.SpaceShipInScreen()
             
-        print(self.spaceshipX, self.spaceshipY) 
         self.screen.blit(self.spaceship, (self.spaceshipX, self.spaceshipY))
         self.pyg.event.pump()
+
+    def SpaceShipInScreen(self):
+        if self.spaceshipX < 0:
+            self.spaceshipX = 0
+        if self.spaceshipY < 0:
+            self.spaceshipY = 0
+        if self.spaceshipX > self.width - self.spaceship.get_rect().size[0]:
+            self.spaceshipX = self.width - self.spaceship.get_rect().size[0]
+        if self.spaceshipY > self.height - self.spaceship.get_rect().size[1]:
+            self.spaceshipY = self.height - self.spaceship.get_rect().size[1]
