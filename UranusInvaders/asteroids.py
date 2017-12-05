@@ -10,6 +10,8 @@ class Asteroids():
         self.height = pyg.display.Info().current_h
         self.spaceshipX = self.width/2
         self.spaceshipY = self.height/2
+        self.spaceshipWidth = self.spaceship.get_rect().size[0]
+        self.spaceshipHeight = self.spaceship.get_rect().size[1]
 
 
     def run(self, event):
@@ -42,7 +44,7 @@ class Asteroids():
             self.spaceshipX = 0
         if self.spaceshipY < 0:
             self.spaceshipY = 0
-        if self.spaceshipX > self.width - self.spaceship.get_rect().size[0]:
-            self.spaceshipX = self.width - self.spaceship.get_rect().size[0]
-        if self.spaceshipY > self.height - self.spaceship.get_rect().size[1]:
-            self.spaceshipY = self.height - self.spaceship.get_rect().size[1]
+        if self.spaceshipX > self.width - self.spaceshipWidth:
+            self.spaceshipX = self.width - self.spaceshipWidth
+        if self.spaceshipY > self.height - self.spaceshipHeight:
+            self.spaceshipY = self.height - self.spaceshipHeight
