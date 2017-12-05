@@ -4,7 +4,6 @@ class Asteroids():
         self.pyg = pyg
         self.screen = screen
         self.myfont = self.pyg.font.SysFont("monospace", 30)
-        self.wheatley = pyg.image.load("Assets/Wheatley.png")
         self.spaceship = pyg.image.load("Assets/spaceship-basic.png")
         self.width = pyg.display.Info().current_w
         self.height = pyg.display.Info().current_h
@@ -15,9 +14,6 @@ class Asteroids():
 
 
     def run(self, event):
-        label = self.myfont.render("Asteroids!", 1, (255,255,0))
-        self.screen.blit(label, (100, 100))
-        self.screen.blit(self.wheatley, (300, 100))
         keys = self.pyg.key.get_pressed()
 
         if keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]:
