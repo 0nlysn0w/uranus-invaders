@@ -5,12 +5,14 @@ class Asteroids():
         self.screen = screen
         self.myfont = self.pyg.font.SysFont("monospace", 30)
         self.spaceship = pyg.image.load("Assets/spaceship-basic.png")
+        self.asteroidMedium = pyg.image.load("Assets/asteroid_1.png")
+        self.asteroidSmall = pyg.image.load("Assets/asteroid_2.png")
         self.width = pyg.display.Info().current_w
         self.height = pyg.display.Info().current_h
-        self.spaceshipX = self.width/2
-        self.spaceshipY = self.height/2
         self.spaceshipWidth = self.spaceship.get_rect().size[0]
         self.spaceshipHeight = self.spaceship.get_rect().size[1]
+        self.spaceshipX = (self.width - self.spaceshipWidth)/2
+        self.spaceshipY = (self.height - self.spaceshipHeight)/2
 
 
     def run(self, event):
@@ -31,6 +33,9 @@ class Asteroids():
 
         #Makes sure the spaceship can't leave the screen
         self.SpaceShipInScreen()
+
+        self.screen.blit(self.asteroidSmall, (300, 100))
+        self.screen.blit(self.asteroidMedium, (500, 200))
             
         self.screen.blit(self.spaceship, (self.spaceshipX, self.spaceshipY))
         self.pyg.event.pump()
