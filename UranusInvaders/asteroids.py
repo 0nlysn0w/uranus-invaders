@@ -1,3 +1,5 @@
+import random
+
 class Asteroids():
     def __init__(self, pyg, screen):
         print("init asteriods")
@@ -13,6 +15,7 @@ class Asteroids():
         self.spaceshipHeight = self.spaceship.get_rect().size[1]
         self.spaceshipX = (self.width - self.spaceshipWidth)/2
         self.spaceshipY = (self.height - self.spaceshipHeight)/2
+        self.asteroids = []
 
 
     def run(self, event):
@@ -30,6 +33,14 @@ class Asteroids():
         if keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]:
            self.spaceshipY += 5
         
+        asteroid = AsteroidObject(self.pyg).newAsteroid()
+        if asteroid != None:
+            self.asteroids.append(asteroid);
+        
+
+        for x in self.asteroids:
+            self.screen.blit(x.asteroid, (x.positionX, x.positionY))
+            x.positionY += x.speed
 
         #Makes sure the spaceship can't leave the screen
         self.SpaceShipInScreen()
@@ -49,3 +60,29 @@ class Asteroids():
             self.spaceshipX = self.width - self.spaceshipWidth
         if self.spaceshipY > self.height - self.spaceshipHeight:
             self.spaceshipY = self.height - self.spaceshipHeight
+
+class AsteroidObject():
+    def __init__(self, pyg):
+        self.pyg = pyg
+        self._asteroidMedium = pyg.image.load("Assets/asteroid_1.png")
+        self._asteroidSmall = pyg.image.load("Assets/asteroid_2.png")
+        self.asteroidChance = 20
+        self.speed = 5
+        self.positionX = 0
+        self.positionY = 0
+        self.asteroid = ""
+
+    def newAsteroid(self):
+        chance = random.randint(0, 500)
+
+        if chance > self.asteroidChance:
+            return
+
+
+        i = random.randint(0, 1)
+        self.asteroid = self._asteroidSmall
+        if i == 1:
+            self.asteroid = self._asteroidMedium
+
+        self.positionX = random.randint(0, self.pyg.display.Info().current_w - self.asteroid.get_rect().size[0])
+        return self
