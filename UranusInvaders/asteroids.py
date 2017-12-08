@@ -3,10 +3,13 @@ from utils import utils
 class Asteroids():
     def __init__(self, pyg, screen):
         print("init asteriods")
+
+        spaceshipLoad = utils.loadObject("Spaceship")
+
         self.pyg = pyg
         self.screen = screen
         self.myfont = self.pyg.font.SysFont("monospace", 30)
-        self.spaceship = pyg.image.load("Assets/spaceship-basic.png")
+        self.spaceship = pyg.image.load("Assets/" + spaceshipLoad + ".png")
         self.asteroidMedium = pyg.image.load("Assets/asteroid_1.png")
         self.asteroidSmall = pyg.image.load("Assets/asteroid_2.png")
         self.width = pyg.display.Info().current_w
@@ -16,7 +19,10 @@ class Asteroids():
         self.spaceshipX = (self.width - self.spaceshipWidth)/2
         self.spaceshipY = (self.height - self.spaceshipHeight)/2
         self.asteroids = []
+
+
         self.speed = 5
+
 
     def background(self):
         asteroid = AsteroidObject(self.pyg).newAsteroid()

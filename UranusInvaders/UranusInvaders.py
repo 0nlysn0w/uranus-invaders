@@ -2,6 +2,7 @@
 
 import sys, pygame, random
 from BaseRenderer import BaseRenderer
+from utils import utils
 pygame.init()
 
 
@@ -20,6 +21,8 @@ if __name__ == "__main__":
     state = "main"
     baseRenderer = BaseRenderer(pygame, screen)
     #the true is because if the state is quit python quits
+
+    utils.load()
     while True:
         #sets state to main after the called function has finished to return you to the main menu
         print("State=" + state)

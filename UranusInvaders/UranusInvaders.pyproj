@@ -55,6 +55,7 @@
     <Content Include="Assets\Asteroid_1.png" />
     <Content Include="Assets\Asteroid_2.png" />
     <Content Include="Assets\ball.png" />
+    <Content Include="Assets\save.json" />
     <Content Include="Assets\spaceship-basic.png" />
     <Content Include="Assets\Wheatley.png" />
   </ItemGroup>

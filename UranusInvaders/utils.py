@@ -1,3 +1,4 @@
+import json
 class utils:
     def inScreen(pyg, x, y, sprite):
         width = pyg.display.Info().current_w
@@ -35,3 +36,21 @@ class utils:
         
         return x, y
         #To call this function you need to call it like this: x, y = utils.move(self.pyg, x, y, self.speed)
+
+    def save(bla):
+        print("not implemented yet")
+
+    def load():
+        openfile = open("Assets/save.json", "r")
+        outfile = json.load(openfile)
+        outfile["AmountStarted"] = outfile["AmountStarted"] + 1
+        tmp = outfile
+
+        openfile = open("Assets/save.json", "w")
+        json.dump(tmp, openfile)
+   
+    def loadObject(name):
+        openfile = open("Assets/save.json", "r")
+        outfile = json.load(openfile)
+        if name in outfile:
+            return outfile[name];
