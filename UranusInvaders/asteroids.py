@@ -1,5 +1,4 @@
 import random
-
 class Asteroids():
     def __init__(self, pyg, screen):
         print("init asteriods")
