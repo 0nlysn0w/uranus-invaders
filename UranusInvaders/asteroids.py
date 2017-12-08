@@ -1,4 +1,5 @@
 import random
+from utils import utils
 class Asteroids():
     def __init__(self, pyg, screen):
         print("init asteriods")
@@ -43,6 +44,8 @@ class Asteroids():
            self.spaceshipY += 5
 
         #Makes sure the spaceship can't leave the screen
+
+        self.spaceshipX, self.spaceshipY = utils.inScreen(self.pyg, self.spaceshipX, self.spaceshipY, self.spaceship)
         self.SpaceShipInScreen()
             
         self.pyg.event.pump()
