@@ -33,6 +33,11 @@ class BaseRenderer():
                         return value
 
                 if i.type == self.pyg.QUIT or (hasattr(i, "key") and self.pyg.KEYDOWN == i.type and getattr(i, "key") == 27):
+                    try:
+                        classCalled.quit()
+                    except :
+                        pass
+
                     self.pyg.key.set_repeat(0, 10)
 
                     running = False

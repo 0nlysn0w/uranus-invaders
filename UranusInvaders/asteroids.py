@@ -7,6 +7,7 @@ class Asteroids():
         spaceshipLoad = utils.loadObject("Spaceship")
 
         self.pyg = pyg
+        self.myfont = self.pyg.font.SysFont("monospace", 30)
         self.screen = screen
         self.myfont = self.pyg.font.SysFont("monospace", 30)
         self.spaceship = pyg.image.load("Assets/" + spaceshipLoad + ".png")
@@ -19,7 +20,8 @@ class Asteroids():
         self.spaceshipX = (self.width - self.spaceshipWidth)/2
         self.spaceshipY = (self.height - self.spaceshipHeight)/2
         self.asteroids = []
-
+        self.highscore = utils.loadObject("highscore", "asteroids")
+        self.score = 0
 
         self.speed = 5
 
@@ -34,6 +36,19 @@ class Asteroids():
             x.positionY += x.speed
 
         self.screen.blit(self.spaceship, (self.spaceshipX, self.spaceshipY))
+        self.score += 1
+        strscore = str(self.score)
+        length = len(strscore);
+        strzero = "000000000000"
+        length = 5-length
+
+        strscore = strzero[0:length] + strscore
+        score = self.myfont.render("Score:" + strscore, 1, (255, 255, 0))
+
+        highscore = self.myfont.render("highscore:" + str(self.highscore), 1, (32, 194, 14))
+        self.screen.blit(score, (20, 20))
+        self.screen.blit(highscore, (self.width - 300, 20))
+
 
     def run(self, event):
         self.spaceshipX, self.spaceshipY = utils.move(self.pyg, self.spaceshipX, self.spaceshipY, self.speed)
@@ -54,6 +69,11 @@ class Asteroids():
             self.spaceshipX = self.width - self.spaceshipWidth
         if self.spaceshipY > self.height - self.spaceshipHeight:
             self.spaceshipY = self.height - self.spaceshipHeight
+
+    def quit(self):
+        if self.highscore == None or (self.highscore != None and self.score > self.highscore):
+            print("save highscore")
+            utils.saveMinigame("highscore", self.score, "asteroids")
 
 class AsteroidObject():
     def __init__(self, pyg):
