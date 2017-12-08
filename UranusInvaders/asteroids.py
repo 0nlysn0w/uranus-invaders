@@ -16,6 +16,7 @@ class Asteroids():
         self.spaceshipX = (self.width - self.spaceshipWidth)/2
         self.spaceshipY = (self.height - self.spaceshipHeight)/2
         self.asteroids = []
+        self.speed = 5
 
     def background(self):
         asteroid = AsteroidObject(self.pyg).newAsteroid()
@@ -29,19 +30,7 @@ class Asteroids():
         self.screen.blit(self.spaceship, (self.spaceshipX, self.spaceshipY))
 
     def run(self, event):
-        keys = self.pyg.key.get_pressed()
-
-        if keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]:
-            self.spaceshipX -= 5
-
-        if keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]:
-            self.spaceshipX += 5
-
-        if keys[self.pyg.K_UP] or keys[self.pyg.K_w]:
-           self.spaceshipY -= 5
-
-        if keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]:
-           self.spaceshipY += 5
+        self.spaceshipX, self.spaceshipY = utils.move(self.pyg, self.spaceshipX, self.spaceshipY, self.speed)
 
         #Makes sure the spaceship can't leave the screen
 
