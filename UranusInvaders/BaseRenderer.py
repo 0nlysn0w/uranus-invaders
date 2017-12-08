@@ -6,7 +6,7 @@ class BaseRenderer():
         self.clock = pyg.time.Clock()
         self.pyg = pyg
         self.screen = screen
-    
+
     def run(self, fileName, className):
         running = True
 
@@ -16,13 +16,14 @@ class BaseRenderer():
         classToCall = getattr(model, className)
         classCalled = classToCall(self.pyg, self.screen);
         while running:
+            self.screen.fill((0, 0, 0))
+            try:
+                classCalled.background()
+            except :
+                pass
 
             for i in self.pyg.event.get():
                 #Sets the screen to standard black
-                self.screen.fill((0, 0, 0))
-
-                #This makes sure the init function works, if you don't want to call the run function, that's your loss
-                
                 state = classCalled.run(i)
                 if type(state) == str:
                     state,value = state.split("=")
@@ -34,9 +35,7 @@ class BaseRenderer():
 
                     running = False
                     return "quit";
-                else:
-                    #sets the fps and updates the game screen.
-                    self.pyg.display.update()
-                    self.clock.tick(30)
 
-
+            #sets the fps and updates the game screen.
+            self.pyg.display.flip()
+            self.clock.tick(30)
