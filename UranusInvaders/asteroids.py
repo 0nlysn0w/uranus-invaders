@@ -22,8 +22,9 @@ class Asteroids():
         self.asteroids = []
         self.highscore = utils.loadObject("highscore", "asteroids")
         self.score = 0
-
+        self.invinFrames = 20
         self.speed = 5
+        self.lifes = 3
 
 
     def background(self):
@@ -48,6 +49,17 @@ class Asteroids():
         highscore = self.myfont.render("highscore:" + str(self.highscore), 1, (32, 194, 14))
         self.screen.blit(score, (20, 20))
         self.screen.blit(highscore, (self.width - 300, 20))
+        if self.invinFrames > 0:
+            self.invinFrames = self.invinFrames - 1
+
+        for x in self.asteroids:
+            hit = utils.collisionDetect(x.asteroid, x.positionX, x.positionY, self.spaceship, self.spaceshipX, self.spaceshipY)
+            if hit == True and self.invinFrames == 0:
+                self.invinFrames = 50
+                self.lifes = self.lifes - 1
+        
+        lifes = self.myfont.render("lifes:" + str(self.lifes), 1, (32, 194, 14))
+        self.screen.blit(lifes, (self.width / 3, 20))
 
 
     def run(self, event):

@@ -37,6 +37,20 @@ class utils:
         return x, y
         #To call this function you need to call it like this: x, y = utils.move(self.pyg, x, y, self.speed)
 
+    def collisionDetect(firstSprite, firstX, firstY, secondSprite, secondX, secondY):
+        firstSpriteX = firstSprite.get_rect().size[0] + firstY
+        firstSpriteY = firstSprite.get_rect().size[1] + firstY
+
+        secondSpriteX = secondSprite.get_rect().size[0] + secondX
+        secondspriteY = secondSprite.get_rect().size[1] + secondY
+
+        rX = range(firstX, firstSpriteX)
+        rY = range(firstY, firstSpriteY)
+        if (secondX in rX or secondSpriteX in rX) and (secondY in rY or secondspriteY in rY):
+            return True
+        else:
+            return False
+
     def load():
         openfile = open("Assets/save.json", "r")
         outfile = json.load(openfile)
