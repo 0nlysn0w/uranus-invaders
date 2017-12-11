@@ -14,6 +14,7 @@ class SpaceRace():
         self.spaceshipX = (self.width - self.spaceshipWidth)/2
         self.spaceshipY = (self.height - self.spaceshipHeight)/2
         self.rotation = 0
+        self.speed = 10
 
     def background(self):
 
@@ -29,36 +30,36 @@ class SpaceRace():
 
         # North
         if keys[self.pyg.K_UP] or keys[self.pyg.K_w]:
-           self.spaceshipY += 5
+           self.spaceshipY += self.speed
            self.rotation = 0
+
+        # East
+        if keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]:
+            self.spaceshipX -= self.speed
+            self.rotation = 270
+
+        # South
+        if keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]:
+           self.spaceshipY -= self.speed
+           self.rotation = 180
+
+        # West
+        if keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]:
+            self.spaceshipX += self.speed
+            self.rotation = 90
 
         # North East
         if (keys[self.pyg.K_UP] or keys[self.pyg.K_w]) and (keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]):
             self.rotation = 315
 
-        # East
-        if keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]:
-            self.spaceshipX -= 5
-            self.rotation = 270
-
         # South East
         if (keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]) and (keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]):
            self.rotation = 225
 
-        # South
-        if keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]:
-           self.spaceshipY -= 5
-           self.rotation = 180
-
         # South West
         if (keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]) and (keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]):
-           self.rotation = 135
+           self.rotation = 135  
 
-        # West
-        if keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]:
-            self.spaceshipX += 5
-            self.rotation = 90
-   
         # North West
         if (keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]) and (keys[self.pyg.K_UP] or keys[self.pyg.K_w]):
            self.rotation = 45
