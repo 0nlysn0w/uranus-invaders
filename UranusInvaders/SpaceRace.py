@@ -5,16 +5,65 @@ class SpaceRace():
         self.pyg = pyg
         self.myfont = self.pyg.font.SysFont("monospace", 30)
         self.screen = screen
-        self.wheatley = pyg.image.load("Assets/Wheatley.png")
+        self.spaceship = pyg.image.load("Assets/spaceship-basic.png")
+        self.track = pyg.image.load("Assets/track-1.png")
+        self.width = pyg.display.Info().current_w
+        self.height = pyg.display.Info().current_h
+        self.spaceshipWidth = self.spaceship.get_rect().size[0]
+        self.spaceshipHeight = self.spaceship.get_rect().size[1]
+        self.spaceshipX = (self.width - self.spaceshipWidth)/2
+        self.spaceshipY = (self.height - self.spaceshipHeight)/2
+        self.rotation = 0
+        self.speed = 10
 
     def background(self):
-        label = self.myfont.render("SpaceRace!", 1, (255,255,0))
-        quit = self.myfont.render("press ESC to go back to the main menu", 1, (255,255,0))
-        self.screen.blit(label, (100, 100))
-        self.screen.blit(quit, (100, 500))
-        self.screen.blit(self.wheatley, (300, 100))
-        #here you make stuff what you need to render always
+
+        rotatedimg = self.pyg.transform.rotate(self.spaceship, self.rotation)
+
+        self.screen.blit(self.track, (self.spaceshipX, self.spaceshipY))
+        self.screen.blit(rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
 
     def run(self, event):
-        #here you make the code if you need events to move stuff
-        m = 0
+        keys = self.pyg.key.get_pressed()
+
+        #print(keys)
+
+        # North
+        if keys[self.pyg.K_UP] or keys[self.pyg.K_w]:
+           self.spaceshipY += self.speed
+           self.rotation = 0
+
+        # East
+        if keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]:
+            self.spaceshipX -= self.speed
+            self.rotation = 270
+
+        # South
+        if keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]:
+           self.spaceshipY -= self.speed
+           self.rotation = 180
+
+        # West
+        if keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]:
+            self.spaceshipX += self.speed
+            self.rotation = 90
+
+        # North East
+        if (keys[self.pyg.K_UP] or keys[self.pyg.K_w]) and (keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]):
+            self.rotation = 315
+
+        # South East
+        if (keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]) and (keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]):
+           self.rotation = 225
+
+        # South West
+        if (keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]) and (keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]):
+           self.rotation = 135  
+
+        # North West
+        if (keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]) and (keys[self.pyg.K_UP] or keys[self.pyg.K_w]):
+           self.rotation = 45
+
+
+
+       # self.pyg.event.pump()
