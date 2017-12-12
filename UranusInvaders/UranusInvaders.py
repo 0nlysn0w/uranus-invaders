@@ -18,7 +18,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(size)
 
     #sets the initial value to make sure it runs the main menu
-    state = "joost" # Goes straight to SpaceRace
+    state = "main" # Goes straight to SpaceRace
     baseRenderer = BaseRenderer(pygame, screen)
     #the true is because if the state is quit python quits
 
