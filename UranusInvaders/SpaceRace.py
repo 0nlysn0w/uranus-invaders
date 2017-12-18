@@ -1,5 +1,13 @@
-import pygame
+import pygame, sys
 from utils import MenuItem
+from BaseRenderer import BaseRenderer
+
+class SpaceRaceGame():
+    def __init__(self, pyg, screen):
+        self.pyg = pyg
+
+    def run(self, event):
+        return
 
 class SpaceRace():
     def __init__(self, pyg, screen):
@@ -21,6 +29,7 @@ class SpaceRace():
         self.state = "menu"
         self.menu_item = MenuItem("Continue", "game", None, 80)
         self.menu_item.set_position((self.width/2)-(self.menu_item.width/2),(self.height/2))
+        self.baseRenderer = BaseRenderer(pygame, screen)
 
     def background(self):
 
@@ -41,11 +50,12 @@ class SpaceRace():
             self.menu_item.set_italic(True)
             if self.pyg.mouse.get_pressed()[0]:
                 print("left clicked")
-                print("1. -->" + self.menu_item.redir)
-                self.state = self.menu_item.redir
-                print("2. -->" + self.state)
-                return "return=" + self.state
-                running = True
+                self.baseRenderer.run("SpaceRace", "SpaceRaceGame")
+                #print("1. -->" + self.menu_item.redir)
+                #self.state = self.menu_item.redir
+                #print("2. -->" + self.state)
+                #return "return=" + self.state
+                #running = True
 
         else:
             self.menu_item.set_font_color((255, 255, 255))
