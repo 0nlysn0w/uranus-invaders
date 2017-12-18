@@ -1,5 +1,5 @@
 import pygame, sys
-from utils import MenuItem
+from utils import MenuItemIndex
 from BaseRenderer import BaseRenderer
 
 class SpaceRaceGame():
@@ -76,79 +76,52 @@ class SpaceRace():
         self.width = pyg.display.Info().current_w
         self.height = pyg.display.Info().current_h
         self.state = "menu"
-        self.menu_item = MenuItem("Continue", "game", None, 80)
-        self.menu_item.set_position((self.width/2)-(self.menu_item.width/2),(self.height/2))
+        #self.menu_item = MenuItem("Continue", "game", None, 80)
+        #self.menu_item.set_position((self.width/2)-(self.menu_item.width/2),(self.height/2))
         self.baseRenderer = BaseRenderer(pygame, screen)
+        self.option_items = []
+        self.test = ""
 
-    def background(self):
+        options = ("Continue", "Option", "Exit")
 
-        if self.state ==  "menu":
-            self.menu()
-        elif self.state == "game":
-            self.game(self.event)
-            rotatedimg = self.pyg.transform.rotate(self.spaceship, self.rotation)
+        actions = ("StartGame", "Options", "Exit")
 
-            self.screen.blit(self.track, (self.spaceshipX, self.spaceshipY))
-            self.screen.blit(rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
+        for index, option in enumerate(options):
+            option_item = MenuItemIndex(str(option), option, index, None, 80)
+
+            t_h = len(options) * option_item.height
+            pos_x = (self.width / 2) - (option_item.width / 2)
+            pos_y = (self.height / 2) - (t_h / 2) + ((index * 2) + index * option_item.height)
+
+            option_item.set_position(pos_x, pos_y)
+
+            self.option_items.append(option_item)
+
+
 
     def run(self, event):       
-
+        # laatst bezig geweest met het toevoegen van een index aan eenmenu item. dit om bij te houden welk item er geselecteerd is
+        keyinput = self.pyg.key.get_pressed()
         mouseProperties = self.pyg.mouse.get_pos()
-        if self.menu_item.is_mouse_selection(mouseProperties[0], mouseProperties[1]):
-            self.menu_item.set_font_color((255, 0, 0))
-            self.menu_item.set_italic(True)
-            if self.pyg.mouse.get_pressed()[0]:
-                print("left clicked")
-                self.baseRenderer.run("SpaceRace", "SpaceRaceGame")
-                #print("1. -->" + self.menu_item.redir)
-                #self.state = self.menu_item.redir
-                #print("2. -->" + self.state)
-                #return "return=" + self.state
-                #running = True
+        self.screen.fill((0, 0, 0))
+        for option in self.option_items:
+            if option.is_mouse_selection(mouseProperties[0], mouseProperties[1]):
+                option.set_font_color((255, 0, 0))
+                option.set_italic(True)
+                if self.pyg.mouse.get_pressed()[0]:
+                    print("left clicked")
+                    self.baseRenderer.run("SpaceRace", "SpaceRaceGame")
+                    running = False
+            else:
+                option.set_font_color((255, 255, 255))
+                option.set_italic(False)
+            index = str(option.index)
+            print(str(option.label) + index)
+            print(self.test)
+            #option.label += " " + index
+            self.screen.blit(option.label, option.position)
 
-        else:
-            self.menu_item.set_font_color((255, 255, 255))
-            self.menu_item.set_italic(False)
-    
-    def menu(self):
-        self.screen.blit(self.menu_item.label, self.menu_item.position)
-
-
-        return
-
-    def game(self, event):
-            # North
-            if keys[self.pyg.K_UP] or keys[self.pyg.K_w]:
-               self.spaceshipY += self.speed
-               self.rotation = 0
-
-            # East
-            if keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]:
-                self.spaceshipX -= self.speed
-                self.rotation = 270
-
-            # South
-            if keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]:
-               self.spaceshipY -= self.speed
-               self.rotation = 180
-
-            # West
-            if keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]:
-                self.spaceshipX += self.speed
-                self.rotation = 90
-
-            # North East
-            if (keys[self.pyg.K_UP] or keys[self.pyg.K_w]) and (keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]):
-                self.rotation = 315
-
-            # South East
-            if (keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]) and (keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]):
-               self.rotation = 225
-
-            # South West
-            if (keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]) and (keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]):
-               self.rotation = 135  
-
-            # North West
-            if (keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]) and (keys[self.pyg.K_UP] or keys[self.pyg.K_w]):
-               self.rotation = 45
+        for event in self.pyg.event.get():
+            if event.type == self.pyg.K_UP:
+                self.test +=1
+        index %= len(self.option_items)

@@ -118,3 +118,10 @@ class MenuItem(pygame.font.Font):
             (posy >= self.pos_y and posy <= self.pos_y + self.height):
                 return True
         return False
+
+class MenuItemIndex(MenuItem):
+    def __init__(self, text, redir, index, font=None, font_size=30,
+                 font_color=(255, 255, 255), pos_x = 0, pos_y = 0):
+        MenuItem.__init__(self, text, redir, font=None, font_size=30,
+                 font_color=(255, 255, 255), pos_x = 0, pos_y = 0)
+        self.index = index
