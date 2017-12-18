@@ -16,13 +16,13 @@ class BaseRenderer():
         classToCall = getattr(model, className)
         classCalled = classToCall(self.pyg, self.screen);
         while running:
-            try:
-                invert_op = getattr(classCalled, "background", None)
-                if callable(invert_op):
-                    self.screen.fill((0, 0, 0))
-                    classCalled.background()
-            except :
-                pass
+            #try:
+            invert_op = getattr(classCalled, "background", None)
+            if callable(invert_op):
+                self.screen.fill((0, 0, 0))
+                classCalled.background()
+            #except :
+            #    pass
 
             for i in self.pyg.event.get():
                 #Sets the screen to standard black
