@@ -106,22 +106,20 @@ class SpaceRace():
         self.screen.fill((0, 0, 0))
         for option in self.option_items:
             if option.is_mouse_selection(mouseProperties[0], mouseProperties[1]):
-                option.set_font_color((255, 0, 0))
-                option.set_italic(True)
+                option.set_selected(True)
                 if self.pyg.mouse.get_pressed()[0]:
                     print("left clicked")
                     self.baseRenderer.run("SpaceRace", "SpaceRaceGame")
                     running = False
             else:
-                option.set_font_color((255, 255, 255))
-                option.set_italic(False)
+                option.set_selected(False)
             index = str(option.index)
             print(str(option.label) + index)
             print(self.test)
             #option.label += " " + index
             self.screen.blit(option.label, option.position)
 
-        for event in self.pyg.event.get():
-            if event.type == self.pyg.K_UP:
-                self.test +=1
-        index %= len(self.option_items)
+        #for event in self.pyg.event.get():
+        #    if event.type == self.pyg.K_UP:
+        #        self.test +=1
+        #index %= len(self.option_items)
