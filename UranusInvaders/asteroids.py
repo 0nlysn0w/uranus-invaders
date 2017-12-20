@@ -1,7 +1,7 @@
 import random
 import pygame
-from utils import utils
-from GameMenu import MenuItem
+import math
+from utils import utils, MenuItem
 
 class Asteroids(pygame.font.Font):
     def __init__(self, pyg, screen):
@@ -25,7 +25,7 @@ class Asteroids(pygame.font.Font):
         self.score = 0
         self.invinFrames = 20
         self.speed = 5
-        self.lifes = 1
+        self.lifes = 3
         self.updateHighscore = False
 
 
@@ -85,7 +85,6 @@ class Asteroids(pygame.font.Font):
 
         for x in self.asteroids:
             hit = utils.collisionDetect(x.image, x.x, x.y, self.image, self.x, self.y)
-            print(hit)
             if hit == True and self.invinFrames == 0:
                 self.lifes -= 1
                 self.invinFrames = 60
@@ -115,9 +114,9 @@ class Asteroids(pygame.font.Font):
             self.y = self.screenHeight - self.height
 
     def quit(self):
+        utils.addCurrency(math.ceil(self.score / 10))
         if self.highscore == None or (self.highscore != None and self.updateHighscore == True):
-            print("save highscore")
-            utils.saveMinigame("highscore", self.score, "asteroids")
+            utils.save("highscore", self.score, "asteroids")
 
 class AsteroidObject(pygame.sprite.Sprite):
     def __init__(self, pyg):

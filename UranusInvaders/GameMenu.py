@@ -1,5 +1,5 @@
 import pygame
-from utils import MenuItem
+from utils import MenuItem, utils
 
 class GameMenu():
     def __init__(self, pyg, screen):
@@ -11,11 +11,18 @@ class GameMenu():
         self.items = []
 
         #The names of the menu items, if you change this the text on screen changes
-        items = ("Space Invaders", "Asteroids", "Alien Slayer", "Planetary Survival", "Traffic madness on Uranus", "Space Race", "Quit")
+        items = ("Space Invaders", "Asteroids", "Alien Slayer", "Planetary Survival", "Traffic madness on Uranus", "Space Race", "shop", "Quit")
 
         #The name of the state which determines which minigame it'll load
-        redir = ("tim", "ramon", "floris", "jurian", "kelvin", "joost", "quit")
+        redir = ("tim", "ramon", "floris", "jurian", "kelvin", "joost", "shop", "quit")
+
+
+        currency = utils.loadObject("Currency")
+        self.currency = MenuItem("£" + str(currency),"none")
+        self.currency.set_position(20, 20)
+        self.currency.set_font_color((33,108,42))
         
+
         for index, item in enumerate(items):
             menu_item = MenuItem(item, redir[index])
  
@@ -28,6 +35,7 @@ class GameMenu():
 
     def run(self, event):
         self.screen.fill((0, 0, 0))
+        self.screen.blit(self.currency.label, self.currency.position)
         for item in self.items:
             mouseProperties = self.pyg.mouse.get_pos()
             if item.is_mouse_selection(mouseProperties[0], mouseProperties[1]):

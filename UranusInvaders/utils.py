@@ -73,7 +73,7 @@ class utils:
         if name in outfile:
             return outfile[name];
 
-    def saveMinigame(name, valuem, minigame = "none"):
+    def save(name, valuem, minigame = "none"):
         openfile = open("Assets/save.json", "r")
         outfile = json.load(openfile)
         if minigame != "none":
@@ -87,6 +87,16 @@ class utils:
 
         openfile = open("Assets/save.json", "w")
         json.dump(tmp, openfile)
+
+    def addCurrency(currency):
+        openfile = open("Assets/save.json", "r")
+        outfile = json.load(openfile)
+        outfile["Currency"] = outfile["Currency"] + currency
+        tmp = outfile
+
+        openfile = open("Assets/save.json", "w")
+        json.dump(tmp, openfile)
+        
 
 class MenuItem(pygame.font.Font):
     def __init__(self, text, redir, font=None, font_size=30,
