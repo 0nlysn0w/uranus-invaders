@@ -25,42 +25,92 @@ class Asteroids(pygame.font.Font):
         self.score = 0
         self.invinFrames = 20
         self.speed = 5
-        self.lifes = 1
+        self.lifes = 3
         self.updateHighscore = False
+        self.state = "menu"
+        self.items = []
+
+        items = ("Start", "How to play", "Quit")
+        redir = ("game", "htp", "quit")
+        for index, item in enumerate(items):
+            menu_item = MenuItem(item, redir[index])
+ 
+            t_h = len(items) * menu_item.height
+            pos_x = (self.screenWidth / 2) - (menu_item.width / 2)
+            pos_y = (self.screenHeight / 2) - (t_h / 2) + ((index * 2) + index * menu_item.height)
+
+            menu_item.set_position(pos_x, pos_y)
+            self.items.append(menu_item)
 
 
     def background(self):
+        if self.state == "menu":
+            m = self.menu()
+            return m
+        elif self.state == "game":
+            self.gameBackground()
+        elif self.state == "quit":
+            return "return=main"
+
+    def run(self, event):
+        if self.state == "Menu":
+            m = self.menu()
+            if m == "return=main":
+                return m
+        else:
+
+            self.x, self.y = utils.move(self.pyg, self.x, self.y, self.speed)
+
+            #Makes sure the spaceship can't leave the screen
+
+            self.x, self.y = utils.inScreen(self.pyg, self.x, self.y, self.image)
+            self.SpaceShipInScreen()
+            
+            self.pyg.event.pump()
+        
+    def menu(self):
+        for item in self.items:
+            mouseProperties = self.pyg.mouse.get_pos()
+            if item.is_mouse_selection(mouseProperties[0], mouseProperties[1]):
+                item.set_font_color((255, 0, 0))
+                item.set_italic(True)
+                if self.pyg.mouse.get_pressed()[0]:
+                    self.state = item.redir
+                    #if item.redir == "quit":
+                    #    return "return=main"
+
+            else:
+                item.set_font_color((255, 255, 255))
+                item.set_italic(False)
+            self.screen.blit(item.label, item.position)
+
+
+    def SpaceShipInScreen(self):
+        if self.x < 0:
+            self.x = 0
+        if self.y < 0:
+            self.y = 0
+        if self.x > self.screenWidth - self.width:
+            self.x = self.screenWidth - self.width
+        if self.y > self.screenHeight - self.height:
+            self.y = self.screenHeight - self.height
+
+    def gameBackground(self):
         if self.lifes == 0:
-            gameover = MenuItem("Game over!", "none", None, 80, (138, 7, 7))
-            pos_x = (self.screenWidth / 2) - (gameover.width / 2)
-            pos_y = (self.screenHeight / 2) - (gameover.height / 2)
-            gameover.set_position(pos_x, pos_y)
-            self.screen.blit(gameover.label, gameover.position)
-
-            strscore = str(self.score)
-            score = MenuItem("Score: " + strscore, "none", None, 30, (255, 255, 0))
-            pos_x = (self.screenWidth / 2) - (score.width / 2)
-            pos_y = (self.screenHeight / 4) - (score.height / 2)
-            score.set_position(pos_x, pos_y)
-            self.screen.blit(score.label, score.position)
-
-            strhighscore = str(self.highscore)
-            highscore = MenuItem("Highscore: " + strhighscore, "none", None, 30, (255, 255, 0))
-            pos_x = (self.screenWidth / 2) - (highscore.width / 2)
-            pos_y = (self.screenHeight / 8 * 3) - (highscore.height / 2)
-            highscore.set_position(pos_x, pos_y)
-            self.screen.blit(highscore.label, highscore.position)
-
+            self.gameover()
             return;
+
         asteroid = AsteroidObject(self.pyg).newAsteroid()
         if asteroid != None:
             self.asteroids.append(asteroid);
         
+        removeAsteroids = []
         for x in self.asteroids:
             if x.y > self.screenHeight:
-                self.asteroids.remove(x)
-            self.screen.blit(x.image, (x.x, x.y))
-            x.y += x.speed
+                removeAsteroids.append(x)
+            else:
+                x.y += x.speed
+                self.screen.blit(x.image, (x.x, x.y))
 
         self.screen.blit(self.image, (self.x, self.y))
         #score
@@ -85,34 +135,38 @@ class Asteroids(pygame.font.Font):
 
         for x in self.asteroids:
             hit = utils.collisionDetect(x.image, x.x, x.y, self.image, self.x, self.y)
-            print(hit)
             if hit == True and self.invinFrames == 0:
                 self.lifes -= 1
                 self.invinFrames = 60
+                removeAsteroids.append(x);
+
+        for x in removeAsteroids:
+            self.asteroids.remove(x)
         
         lifes = self.myfont.render("lifes:" + str(self.lifes), 1, (32, 194, 14))
         self.screen.blit(lifes, (self.screenWidth / 3, 20))
 
+    def gameover(self):
+            gameover = MenuItem("Game over!", "none", None, 80, (138, 7, 7))
+            pos_x = (self.screenWidth / 2) - (gameover.width / 2)
+            pos_y = (self.screenHeight / 2) - (gameover.height / 2)
+            gameover.set_position(pos_x, pos_y)
+            self.screen.blit(gameover.label, gameover.position)
 
-    def run(self, event):
-        self.x, self.y = utils.move(self.pyg, self.x, self.y, self.speed)
+            strscore = str(self.score)
+            score = MenuItem("Score: " + strscore, "none", None, 30, (255, 255, 0))
+            pos_x = (self.screenWidth / 2) - (score.width / 2)
+            pos_y = (self.screenHeight / 4) - (score.height / 2)
+            score.set_position(pos_x, pos_y)
+            self.screen.blit(score.label, score.position)
 
-        #Makes sure the spaceship can't leave the screen
+            strhighscore = str(self.highscore)
+            highscore = MenuItem("Highscore: " + strhighscore, "none", None, 30, (255, 255, 0))
+            pos_x = (self.screenWidth / 2) - (highscore.width / 2)
+            pos_y = (self.screenHeight / 8 * 3) - (highscore.height / 2)
+            highscore.set_position(pos_x, pos_y)
+            self.screen.blit(highscore.label, highscore.position)
 
-        self.x, self.y = utils.inScreen(self.pyg, self.x, self.y, self.image)
-        self.SpaceShipInScreen()
-            
-        self.pyg.event.pump()
-
-    def SpaceShipInScreen(self):
-        if self.x < 0:
-            self.x = 0
-        if self.y < 0:
-            self.y = 0
-        if self.x > self.screenWidth - self.width:
-            self.x = self.screenWidth - self.width
-        if self.y > self.screenHeight - self.height:
-            self.y = self.screenHeight - self.height
 
     def quit(self):
         if self.highscore == None or (self.highscore != None and self.updateHighscore == True):
