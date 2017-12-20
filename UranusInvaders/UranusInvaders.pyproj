@@ -58,6 +58,7 @@
     <Content Include="Assets\save.json" />
     <Content Include="Assets\spaceship-basic.png" />
     <Content Include="Assets\track-1.png" />
+    <Content Include="Assets\explosion.png" />
     <Content Include="Assets\Wheatley.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

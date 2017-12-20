@@ -29,6 +29,8 @@ class Asteroids(pygame.font.Font):
         self.updateHighscore = False
         self.state = "menu"
         self.items = []
+        self.explosion = pyg.image.load("Assets/explosion.png")
+        self.exploded = None;
 
         items = ("Start", "How to play", "Quit")
         redir = ("game", "htp", "quit")
@@ -55,8 +57,7 @@ class Asteroids(pygame.font.Font):
     def run(self, event):
         if self.state == "Menu":
             m = self.menu()
-            if m == "return=main":
-                return m
+            return m
         else:
 
             self.x, self.y = utils.move(self.pyg, self.x, self.y, self.speed)
@@ -76,8 +77,6 @@ class Asteroids(pygame.font.Font):
                 item.set_italic(True)
                 if self.pyg.mouse.get_pressed()[0]:
                     self.state = item.redir
-                    #if item.redir == "quit":
-                    #    return "return=main"
 
             else:
                 item.set_font_color((255, 255, 255))
@@ -132,13 +131,17 @@ class Asteroids(pygame.font.Font):
         self.screen.blit(highscore, (self.screenWidth - 300, 20))
         if self.invinFrames > 0:
             self.invinFrames = self.invinFrames - 1
+        if self.exploded != None and self.invinFrames < 15:
+            self.asteroids.remove(self.exploded)
+            self.exploded = None
 
         for x in self.asteroids:
             hit = utils.collisionDetect(x.image, x.x, x.y, self.image, self.x, self.y)
             if hit == True and self.invinFrames == 0:
                 self.lifes -= 1
                 self.invinFrames = 60
-                removeAsteroids.append(x);
+                x.image = self.explosion
+                self.exploded = x
 
         for x in removeAsteroids:
             self.asteroids.remove(x)
@@ -162,6 +165,12 @@ class Asteroids(pygame.font.Font):
 
             strhighscore = str(self.highscore)
             highscore = MenuItem("Highscore: " + strhighscore, "none", None, 30, (255, 255, 0))
+            pos_x = (self.screenWidth / 2) - (highscore.width / 2)
+            pos_y = (self.screenHeight / 8 * 3) - (highscore.height / 2)
+            highscore.set_position(pos_x, pos_y)
+            self.screen.blit(highscore.label, highscore.position)
+
+            highscore = MenuItem("Try again", "none", None, 30, (255, 255, 0))
             pos_x = (self.screenWidth / 2) - (highscore.width / 2)
             pos_y = (self.screenHeight / 8 * 3) - (highscore.height / 2)
             highscore.set_position(pos_x, pos_y)
