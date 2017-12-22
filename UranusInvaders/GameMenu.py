@@ -43,5 +43,4 @@ class GameMenu():
             else:
                 item.set_font_color((255, 255, 255))
                 item.set_italic(False)
-            print(item.label)
             self.screen.blit(item.label, item.position)
