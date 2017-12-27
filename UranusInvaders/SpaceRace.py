@@ -15,8 +15,10 @@ class SpaceRace():
         self.track = pyg.image.load("Assets/track-1.png")
         self.spaceshipWidth = self.spaceship.get_rect().size[0]
         self.spaceshipHeight = self.spaceship.get_rect().size[1]
-        self.spaceshipX = (self.width - self.spaceshipWidth)/2
-        self.spaceshipY = (self.height - self.spaceshipHeight)/2
+        self.trackWidth = self.track.get_rect().size[0]
+        self.trackHeight = self.track.get_rect().size[1]
+        self.spaceshipX = 0#(self.width - self.trackWidth)/2
+        self.spaceshipY = 0#(self.height - self.trackHeight)/2
         self.rotation = 0
         self.speed = 10
         self.state = "menu"
@@ -48,7 +50,8 @@ class SpaceRace():
         elif self.state == "game":
             rotatedimg = self.pyg.transform.rotate(self.spaceship, self.rotation)
 
-            self.screen.blit(self.track, (self.spaceshipX, self.spaceshipY))
+            #self.screen.blit(self.track, (self.spaceshipX, self.spaceshipY))
+            self.screen.blit(self.track, (self.width/2 + self.spaceshipX, self.height/2 + self.spaceshipY))
             self.screen.blit(rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
 
     def run(self, event):       
@@ -70,12 +73,20 @@ class SpaceRace():
                 option.set_selected(False)
             self.screen.blit(option.label, option.position)
 
+    def can_move(self, x, y):
+        print("x= ", x, ", y= ", y)
+        
+        if y > 0:
+            return False
+        return True
+
     def game(self, event):
         keys = self.pyg.key.get_pressed()
 
         # North
         if keys[self.pyg.K_UP] or keys[self.pyg.K_w]:
-            self.spaceshipY += self.speed
+            if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
+                self.spaceshipY += self.speed
             self.rotation = 0
 
         # East
