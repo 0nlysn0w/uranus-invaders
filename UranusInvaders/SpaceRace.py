@@ -12,8 +12,8 @@ class SpaceRace():
         self.width = pyg.display.Info().current_w
         self.height = pyg.display.Info().current_h
         self.spaceship = pyg.image.load("Assets/spaceship-basic.png")
-        self.track = pyg.image.load("Assets/track-2.png")
-        self.track_mask = pyg.image.load("Assets/track-mask-2.png")
+        self.track = pyg.image.load("Assets/free.png")
+        self.track_mask = pyg.image.load("Assets/free.png")
         self.spaceshipWidth = self.spaceship.get_rect().size[0]
         self.spaceshipHeight = self.spaceship.get_rect().size[1]
         self.trackWidth = self.track.get_rect().size[0]
@@ -29,6 +29,7 @@ class SpaceRace():
         self.baseRenderer = BaseRenderer(pygame, screen)
         self.option_items = []
         self.test = ""
+        self.keys = [False, False, False, False]
 
         options = ("Continue", "Option", "Exit")
 
@@ -45,16 +46,65 @@ class SpaceRace():
 
             self.option_items.append(option_item)
 
+    def calcRotation(self):
+        return
+
     def background(self):
+
+        if self.keys[0] == True:
+            if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
+                self.spaceshipY += self.speed
+            self.rotation = 0
+        if self.keys[1] == True:
+            if self.can_move(self.spaceshipX - self.speed, self.spaceshipY):
+                self.spaceshipX -= self.speed
+            self.rotation = 270
+        if self.keys[2] == True:
+            if self.can_move(self.spaceshipX, self.spaceshipY - self.speed):
+                self.spaceshipY -= self.speed
+            self.rotation = 180
+        if self.keys[3] == True:
+            if self.can_move(self.spaceshipX + self.speed, self.spaceshipY):
+                self.spaceshipX += self.speed
+            self.rotation = 90
 
         if self.state ==  "menu":
             self.menu()
         elif self.state == "game":
             rotatedimg = self.pyg.transform.rotate(self.spaceship, self.rotation)
 
-            #self.screen.blit(self.track, (self.spaceshipX, self.spaceshipY))
             self.screen.blit(self.track, (self.width/2 + self.spaceshipX, self.height/2 + self.spaceshipY))
             self.screen.blit(rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
+
+            for i in self.pyg.event.get():
+                if i.type == self.pyg.KEYDOWN:
+                    if i.key == self.pyg.K_UP:
+                        self.keys[0] = True
+                    if i.key == self.pyg.K_RIGHT:
+                        self.keys[1] = True
+                    if i.key == self.pyg.K_DOWN:
+                        self.keys[2] = True
+                    if i.key == self.pyg.K_LEFT:
+                        self.keys[3] = True
+
+                if i.type == self.pyg.KEYUP:
+                    if i.key == self.pyg.K_UP:
+                        self.keys[0] = False
+                    if i.key == self.pyg.K_RIGHT:
+                        self.keys[1] = False
+                    if i.key == self.pyg.K_DOWN:
+                        self.keys[2] = False
+                    if i.key == self.pyg.K_LEFT:
+                        self.keys[3] = False
+
+
+
+                        if self.isPressed(pygame.event.get()):
+                            if keys[self.pyg.K_UP] or keys[self.pyg.K_w]:
+                                if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
+                                    self.spaceshipY += self.speed
+                                self.rotation = 0
+
 
     def run(self, event):       
         if self.state == "menu":
@@ -100,47 +150,50 @@ class SpaceRace():
         return color_code.a > 0
 
     def game(self, event):
-        keys = self.pyg.key.get_pressed()
+        #keys = self.pyg.key.get_pressed()
 
-        # North
-        if keys[self.pyg.K_UP] or keys[self.pyg.K_w]:
-            if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
-                self.spaceshipY += self.speed
-            self.rotation = 0
 
-        # East
-        if keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]:
-            if self.can_move(self.spaceshipX - self.speed, self.spaceshipY):
-                self.spaceshipX -= self.speed
-            self.rotation = 270
+        return
 
-        # South
-        if keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]:
-            if self.can_move(self.spaceshipX, self.spaceshipY - self.speed):
-                self.spaceshipY -= self.speed
-            self.rotation = 180
+        ## North
+        #if keys[self.pyg.K_UP] or keys[self.pyg.K_w]:
+        #    if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
+        #        self.spaceshipY += self.speed
+        #    self.rotation = 0
 
-        # West
-        if keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]:
-            if self.can_move(self.spaceshipX + self.speed, self.spaceshipY):
-                self.spaceshipX += self.speed
-            self.rotation = 90
+        ## East
+        #if keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]:
+        #    if self.can_move(self.spaceshipX - self.speed, self.spaceshipY):
+        #        self.spaceshipX -= self.speed
+        #    self.rotation = 270
 
-        # North East
-        if (keys[self.pyg.K_UP] or keys[self.pyg.K_w]) and (keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]):
-            self.rotation = 315
+        ## South
+        #if keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]:
+        #    if self.can_move(self.spaceshipX, self.spaceshipY - self.speed):
+        #        self.spaceshipY -= self.speed
+        #    self.rotation = 180
 
-        # South East
-        if (keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]) and (keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]):
-            self.rotation = 225
+        ## West
+        #if keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]:
+        #    if self.can_move(self.spaceshipX + self.speed, self.spaceshipY):
+        #        self.spaceshipX += self.speed
+        #    self.rotation = 90
 
-        # South West
-        if (keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]) and (keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]):
-            self.rotation = 135  
+        ## North East
+        #if (keys[self.pyg.K_UP] or keys[self.pyg.K_w]) and (keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]):
+        #    self.rotation = 315
 
-        # North West
-        if (keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]) and (keys[self.pyg.K_UP] or keys[self.pyg.K_w]):
-            self.rotation = 45
+        ## South East
+        #if (keys[self.pyg.K_RIGHT] or keys[self.pyg.K_d]) and (keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]):
+        #    self.rotation = 225
+
+        ## South West
+        #if (keys[self.pyg.K_DOWN] or keys[self.pyg.K_s]) and (keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]):
+        #    self.rotation = 135  
+
+        ## North West
+        #if (keys[self.pyg.K_LEFT] or keys[self.pyg.K_a]) and (keys[self.pyg.K_UP] or keys[self.pyg.K_w]):
+        #    self.rotation = 45
 
 
         #for event in self.pyg.event.get():
