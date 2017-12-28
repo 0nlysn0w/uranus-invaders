@@ -25,6 +25,8 @@ class BaseRenderer():
                 pass
 
             for i in self.pyg.event.get():
+                #TODO: delete this when done
+                print("Base:  ", i)
                 #Sets the screen to standard black
                 state = classCalled.run(i)
                 if type(state) == str:

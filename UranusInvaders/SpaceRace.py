@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, math
 from utils import MenuItemIndex
 from BaseRenderer import BaseRenderer
 
@@ -22,7 +22,7 @@ class SpaceRace():
         self.spaceshipX = -142#(self.width - self.trackWidth)/2
         self.spaceshipY = -487#(self.height - self.trackHeight)/2
         self.rotation = 0
-        self.speed = 10
+        self.speed = 0#10
         self.state = "menu"
         #self.menu_item = MenuItem("Continue", "game", None, 80)
         #self.menu_item.set_position((self.width/2)-(self.menu_item.width/2),(self.height/2))
@@ -50,31 +50,15 @@ class SpaceRace():
         return
 
     def background(self):
-
-        if self.keys[0] == True:
-            if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
-                self.spaceshipY += self.speed
-            self.rotation = 0
-        if self.keys[1] == True:
-            if self.can_move(self.spaceshipX - self.speed, self.spaceshipY):
-                self.spaceshipX -= self.speed
-            self.rotation = 270
-        if self.keys[2] == True:
-            if self.can_move(self.spaceshipX, self.spaceshipY - self.speed):
-                self.spaceshipY -= self.speed
-            self.rotation = 180
-        if self.keys[3] == True:
-            if self.can_move(self.spaceshipX + self.speed, self.spaceshipY):
-                self.spaceshipX += self.speed
-            self.rotation = 90
-
         if self.state ==  "menu":
             self.menu()
         elif self.state == "game":
-            rotatedimg = self.pyg.transform.rotate(self.spaceship, self.rotation)
-
+            self.rotatedimg = self.pyg.transform.rotate(self.spaceship, self.rotation)
             self.screen.blit(self.track, (self.width/2 + self.spaceshipX, self.height/2 + self.spaceshipY))
-            self.screen.blit(rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
+            self.screen.blit(self.rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
+
+            #stuck here
+            print(self.keys)
 
             for i in self.pyg.event.get():
                 if i.type == self.pyg.KEYDOWN:
@@ -99,20 +83,33 @@ class SpaceRace():
 
 
 
-                        if self.isPressed(pygame.event.get()):
-                            if keys[self.pyg.K_UP] or keys[self.pyg.K_w]:
-                                if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
-                                    self.spaceshipY += self.speed
-                                self.rotation = 0
+                        #if self.isPressed(pygame.event.get()):
+                        #    if keys[self.pyg.K_UP] or keys[self.pyg.K_w]:
+                        #        if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
+                        #            self.spaceshipY += self.speed
+                        #        self.rotation = 0
 
 
     def run(self, event):       
+        print("Run")
         if self.state == "menu":
             s = self.menu()
+            print("Run, menu")
             return s
-        elif self.state == "game":
-            s = self.game(event)
-            return s
+        else:
+            if self.keys[0] == True:
+                if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
+                    self.speed -= 0.2
+            if self.keys[1] == True:
+                self.rotation -= 2
+            if self.keys[2] == True:
+                if self.can_move(self.spaceshipX, self.spaceshipY - self.speed):
+                    self.speed += 0.2
+            if self.keys[3] == True:
+                self.rotation += 2
+
+            self.spaceshipX += math.cos(self.rotation/57.29) * self.speed
+            self.spaceshipY += math.sin(self.rotation/57.29) * self.speed
 
     def menu(self):
         for option in self.option_items:
@@ -150,10 +147,9 @@ class SpaceRace():
         return color_code.a > 0
 
     def game(self, event):
-        #keys = self.pyg.key.get_pressed()
+        keys = self.pyg.key.get_pressed()
 
 
-        return
 
         ## North
         #if keys[self.pyg.K_UP] or keys[self.pyg.K_w]:
