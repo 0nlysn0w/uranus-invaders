@@ -59,59 +59,44 @@ class SpaceRace():
             self.screen.blit(self.track, (self.width/2 + self.spaceshipX, self.height/2 + self.spaceshipY))
             self.screen.blit(self.rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
 
-            if self.keys[0] == True:
-                self.rotation += 2
-            if self.keys[1] == True:
-                self.rotation -= 2
-            if self.keys[2] == True:
-                #if self.can_move(self.spaceshipX, self.spaceshipY - self.speed):
-                    self.speed -= 0.2
-            if self.keys[3] == True:
+            if self.keys[0] == True:    #Left
+                self.rotation = 270
+            if self.keys[1] == True:    #Right
+                self.rotation = 90
+            if self.keys[2] == True:    #Up
+                if self.can_move(self.spaceshipX, self.spaceshipY - self.speed):
+                    self.spaceshipY += self.speed
+                self.rotation = 0
+            if self.keys[3] == True:    #Down
                 #if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
-                self.speed += 0.2
-
-                
-
-
-            for i in self.pyg.event.get():
-                if i.type == self.pyg.KEYDOWN:
-                    if i.key == self.pyg.K_LEFT:
-                        self.keys[0] = True
-                    if i.key == self.pyg.K_RIGHT:
-                        self.keys[1] = True
-                    if i.key == self.pyg.K_UP:
-                        self.keys[2] = True
-                    if i.key == self.pyg.K_DOWN:
-                        self.keys[3] = True
-
-                if i.type == self.pyg.KEYUP:
-                    if i.key == self.pyg.K_LEFT:
-                        self.keys[0] = False
-                    if i.key == self.pyg.K_RIGHT:
-                        self.keys[1] = False
-                    if i.key == self.pyg.K_UP:
-                        self.keys[2] = False
-                    if i.key == self.pyg.K_DOWN:
-                        self.keys[3] = False
-                return
-            
-
-
-                        #if self.isPressed(pygame.event.get()):
-                        #    if keys[self.pyg.K_UP] or keys[self.pyg.K_w]:
-                        #        if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
-                        #            self.spaceshipY += self.speed
-                        #        self.rotation = 0
-
+                self.rotation = 180
 
     def run(self, event):       
         if self.state == "menu":
             s = self.menu()
             return s
         elif self.state == "game":
-            print(self.rotation)
-            #self.spaceshipX += math.cos(self.rotation/57.29) * self.speed
-            #self.spaceshipY += math.sin(self.rotation/57.29) * self.speed
+            print("HENGEL")
+            i = event
+            if i.type == self.pyg.KEYDOWN:
+                if i.key == self.pyg.K_LEFT:
+                    self.keys[0] = True
+                if i.key == self.pyg.K_RIGHT:
+                    self.keys[1] = True
+                if i.key == self.pyg.K_UP:
+                    self.keys[2] = True
+                if i.key == self.pyg.K_DOWN:
+                    self.keys[3] = True
+
+            if i.type == self.pyg.KEYUP:
+                if i.key == self.pyg.K_LEFT:
+                    self.keys[0] = False
+                if i.key == self.pyg.K_RIGHT:
+                    self.keys[1] = False
+                if i.key == self.pyg.K_UP:
+                    self.keys[2] = False
+                if i.key == self.pyg.K_DOWN:
+                    self.keys[3] = False
 
     def menu(self):
         for option in self.option_items:
@@ -138,15 +123,10 @@ class SpaceRace():
         if (y < 0 or y > self.trackHeight - 1):
             return False
 
-        print(self.track_mask.get_at((x,y)))
-
-        color_code = self.track_mask.get_at((x,y))
-
-
-        return self.color_check(color_code)
-
-    def color_check(self, color_code):
-        return color_code.a > 0
+        if (self.track_mask.get_at((x,y)).a) > 0:
+            return True
+        else:
+            return False
 
     def game(self, event):
         keys = self.pyg.key.get_pressed()
