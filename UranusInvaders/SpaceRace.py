@@ -46,41 +46,55 @@ class SpaceRace():
 
             self.option_items.append(option_item)
 
-    def calcRotation(self):
-        return
-
     def background(self):
+        #print("")
         if self.state ==  "menu":
             self.menu()
         elif self.state == "game":
+
+            self.spaceshipX += math.cos(self.rotation/57.29) * self.speed
+            self.spaceshipY += math.sin(self.rotation/57.29) * self.speed
+
             self.rotatedimg = self.pyg.transform.rotate(self.spaceship, self.rotation)
             self.screen.blit(self.track, (self.width/2 + self.spaceshipX, self.height/2 + self.spaceshipY))
             self.screen.blit(self.rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
 
-            #stuck here
-            print(self.keys)
+            if self.keys[0] == True:
+                self.rotation += 2
+            if self.keys[1] == True:
+                self.rotation -= 2
+            if self.keys[2] == True:
+                #if self.can_move(self.spaceshipX, self.spaceshipY - self.speed):
+                    self.speed -= 0.2
+            if self.keys[3] == True:
+                #if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
+                self.speed += 0.2
+
+                
+
 
             for i in self.pyg.event.get():
                 if i.type == self.pyg.KEYDOWN:
-                    if i.key == self.pyg.K_UP:
+                    if i.key == self.pyg.K_LEFT:
                         self.keys[0] = True
                     if i.key == self.pyg.K_RIGHT:
                         self.keys[1] = True
-                    if i.key == self.pyg.K_DOWN:
+                    if i.key == self.pyg.K_UP:
                         self.keys[2] = True
-                    if i.key == self.pyg.K_LEFT:
+                    if i.key == self.pyg.K_DOWN:
                         self.keys[3] = True
 
                 if i.type == self.pyg.KEYUP:
-                    if i.key == self.pyg.K_UP:
+                    if i.key == self.pyg.K_LEFT:
                         self.keys[0] = False
                     if i.key == self.pyg.K_RIGHT:
                         self.keys[1] = False
-                    if i.key == self.pyg.K_DOWN:
+                    if i.key == self.pyg.K_UP:
                         self.keys[2] = False
-                    if i.key == self.pyg.K_LEFT:
+                    if i.key == self.pyg.K_DOWN:
                         self.keys[3] = False
-
+                return
+            
 
 
                         #if self.isPressed(pygame.event.get()):
@@ -91,25 +105,13 @@ class SpaceRace():
 
 
     def run(self, event):       
-        print("Run")
         if self.state == "menu":
             s = self.menu()
-            print("Run, menu")
             return s
-        else:
-            if self.keys[0] == True:
-                if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
-                    self.speed -= 0.2
-            if self.keys[1] == True:
-                self.rotation -= 2
-            if self.keys[2] == True:
-                if self.can_move(self.spaceshipX, self.spaceshipY - self.speed):
-                    self.speed += 0.2
-            if self.keys[3] == True:
-                self.rotation += 2
-
-            self.spaceshipX += math.cos(self.rotation/57.29) * self.speed
-            self.spaceshipY += math.sin(self.rotation/57.29) * self.speed
+        elif self.state == "game":
+            print(self.rotation)
+            #self.spaceshipX += math.cos(self.rotation/57.29) * self.speed
+            #self.spaceshipY += math.sin(self.rotation/57.29) * self.speed
 
     def menu(self):
         for option in self.option_items:
@@ -127,7 +129,7 @@ class SpaceRace():
         x = 0 - min_x
         y = 0 - min_y
 
-        print("x= ", x, ", y= ", y)
+        print("x= ", math.floor(x), ", y= ", math.floor(y))
 
         #x and y not outside track.width and height
         if (x < 0 or x > self.trackWidth - 1):
