@@ -25,12 +25,13 @@ class Asteroids(pygame.font.Font):
         self.score = 0
         self.invinFrames = 20
         self.speed = 5
-        self.lifes = 3
+        self.lifes = 1
         self.updateHighscore = False
         self.state = "menu"
         self.items = []
         self.explosion = pyg.image.load("Assets/explosion.png")
-        self.exploded = None;
+        self.exploded = None
+        self.keys = [False, False, False, False]
 
         items = ("Start", "How to play", "Quit")
         redir = ("game", "htp", "quit")
@@ -50,7 +51,8 @@ class Asteroids(pygame.font.Font):
             m = self.menu()
             return m
         elif self.state == "game":
-            self.gameBackground()
+            m = self.gameBackground()
+            return m
         elif self.state == "quit":
             return "return=main"
 
@@ -59,13 +61,29 @@ class Asteroids(pygame.font.Font):
             m = self.menu()
             return m
         else:
+            #sets the keys so it won't bug out when you do a keyup event and it doesn't trigger any events anymore
+            if event.type == self.pyg.KEYDOWN:
+                if event.key == self.pyg.K_LEFT:
+                    self.keys[0] = True
+                elif event.key == self.pyg.K_RIGHT:
+                    self.keys[1] = True
+                elif event.key == self.pyg.K_UP:
+                    self.keys[2] = True
+                elif event.key == self.pyg.K_DOWN:
+                    self.keys[3] = True
 
-            self.x, self.y = utils.move(self.pyg, self.x, self.y, self.speed)
+            if event.type == self.pyg.KEYUP:
+                if event.key == self.pyg.K_LEFT:
+                    self.keys[0] = False
+                elif event.key == self.pyg.K_RIGHT:
+                    self.keys[1] = False
+                elif event.key == self.pyg.K_UP:
+                    self.keys[2] = False
+                elif event.key == self.pyg.K_DOWN:
+                    self.keys[3] = False
 
             #Makes sure the spaceship can't leave the screen
 
-            self.x, self.y = utils.inScreen(self.pyg, self.x, self.y, self.image)
-            self.SpaceShipInScreen()
             
             self.pyg.event.pump()
         
@@ -95,19 +113,30 @@ class Asteroids(pygame.font.Font):
             self.y = self.screenHeight - self.height
 
     def gameBackground(self):
+        self.x, self.y = utils.movebugfixed(self.pyg, self.x, self.y, self.speed, self.keys)
+        self.x, self.y = utils.inScreen(self.pyg, self.x, self.y, self.image)
+
         if self.lifes == 0:
-            self.gameover()
-            return;
+            m = self.gameover()
+            if m == "tryagain":
+                self.quit()
+                self = self.__init__(self.pyg, self.screen)
+            elif m == "quit":
+                return "return=main"
+
+            return
 
         asteroid = AsteroidObject(self.pyg).newAsteroid()
         if asteroid != None:
-            self.asteroids.append(asteroid);
+            self.asteroids.append(asteroid)
         
         removeAsteroids = []
         for x in self.asteroids:
             if x.y > self.screenHeight:
                 removeAsteroids.append(x)
             else:
+                if x.exploded:
+                    x.image = self.pyg.transform.flip(x.image, True, False)
                 x.y += x.speed
                 self.screen.blit(x.image, (x.x, x.y))
 
@@ -115,7 +144,7 @@ class Asteroids(pygame.font.Font):
         #score
         self.score += 1
         strscore = str(self.score)
-        length = len(strscore);
+        length = len(strscore)
         strzero = "000000000000"
         length = 5-length
 
@@ -138,8 +167,10 @@ class Asteroids(pygame.font.Font):
         for x in self.asteroids:
             hit = utils.collisionDetect(x.image, x.x, x.y, self.image, self.x, self.y)
             if hit == True and self.invinFrames == 0:
+                x.exploded = True
                 self.lifes -= 1
                 self.invinFrames = 60
+                self.explosion = self.pyg.transform.scale(self.explosion, (x.image.get_rect().size[0], x.image.get_rect().size[1]))
                 x.image = self.explosion
                 self.exploded = x
 
@@ -170,11 +201,36 @@ class Asteroids(pygame.font.Font):
             highscore.set_position(pos_x, pos_y)
             self.screen.blit(highscore.label, highscore.position)
 
-            highscore = MenuItem("Try again", "none", None, 30, (255, 255, 0))
-            pos_x = (self.screenWidth / 2) - (highscore.width / 2)
-            pos_y = (self.screenHeight / 8 * 3) - (highscore.height / 2)
-            highscore.set_position(pos_x, pos_y)
-            self.screen.blit(highscore.label, highscore.position)
+            tryagain = MenuItem("Try again", "tryagain", None, 30, (255, 255, 255))
+            pos_x = (self.screenWidth / 4 ) - (tryagain.width / 2)
+            pos_y = (self.screenHeight / 8 * 6) - (tryagain.height / 2)
+            tryagain.set_position(pos_x, pos_y)
+
+            quit = MenuItem("Quit", "quit", None, 30, (255, 255, 255))
+            pos_x = (self.screenWidth / 4 * 3) - (quit.width / 2)
+            pos_y = (self.screenHeight / 8 * 6) - (quit.height / 2)
+            quit.set_position(pos_x, pos_y)
+            items = []
+            items.append(tryagain)
+            items.append(quit)
+            for item in items:
+                mouseProperties = self.pyg.mouse.get_pos()
+                if item.is_mouse_selection(mouseProperties[0], mouseProperties[1]):
+                    item.set_font_color((255, 0, 0))
+                    item.set_italic(True)
+                    if self.pyg.mouse.get_pressed()[0]:
+                        print("left clicked")
+                        print(item.redir)
+                        if item.redir == "tryagain":
+                            return "tryagain"
+                        if item.redir == "quit":
+                            return "quit"
+
+                else:
+                    item.set_font_color((255, 255, 255))
+                    item.set_italic(False)
+                self.screen.blit(item.label, item.position)
+            
 
 
     def quit(self):
@@ -194,6 +250,7 @@ class AsteroidObject(pygame.sprite.Sprite):
         self.y = 0
         self.image = ""
         self.rect = self.x, self.y
+        self.exploded = False
 
     def newAsteroid(self):
         chance = random.randint(0, 500)

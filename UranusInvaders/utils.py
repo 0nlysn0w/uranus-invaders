@@ -39,6 +39,22 @@ class utils:
         return x, y
         #To call this function you need to call it like this: x, y = utils.move(self.pyg, x, y, self.speed)
 
+
+    def movebugfixed(pyg, x, y, speed, keys):
+        if keys[0]:
+            x -= speed
+
+        if keys[1]:
+            x += speed
+
+        if keys[2]:
+           y -= speed
+
+        if keys[3]:
+           y += speed
+        
+        return x, y
+
     def collisionDetect(firstSprite, firstX, firstY, secondSprite, secondX, secondY):
         firstSpriteX = firstSprite.get_rect().size[0] + firstX
         firstSpriteY = firstSprite.get_rect().size[1] + firstY

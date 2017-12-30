@@ -21,9 +21,10 @@ class BaseRenderer():
                 if callable(invert_op):
                     self.screen.fill((0, 0, 0))
                     m = classCalled.background()
-                    state,value = m.split("=")
-                    if state == "return":
-                        return value
+                    if m != None:
+                        state,value = m.split("=")
+                        if state == "return":
+                            return value
             except :
                 pass
 
