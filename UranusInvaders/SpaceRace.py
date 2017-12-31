@@ -12,20 +12,18 @@ class SpaceRace():
         self.width = pyg.display.Info().current_w
         self.height = pyg.display.Info().current_h
         self.spaceship = pyg.image.load("Assets/spaceship-basic.png")
-        self.track = pyg.image.load("Assets/free.png")
-        self.track_mask = pyg.image.load("Assets/free.png")
+        self.track = pyg.image.load("Assets/track-2.png")
+        self.track_mask = pyg.image.load("Assets/track-mask-2.png")
         self.spaceshipWidth = self.spaceship.get_rect().size[0]
         self.spaceshipHeight = self.spaceship.get_rect().size[1]
         self.trackWidth = self.track.get_rect().size[0]
         self.trackHeight = self.track.get_rect().size[1]
         #TODO: from config: start position x and y
-        self.spaceshipX = -142#(self.width - self.trackWidth)/2
-        self.spaceshipY = -487#(self.height - self.trackHeight)/2
+        self.spaceshipX = -142
+        self.spaceshipY = -487
         self.rotation = 0
-        self.speed = 10
+        self.speed = 15
         self.state = "menu"
-        #self.menu_item = MenuItem("Continue", "game", None, 80)
-        #self.menu_item.set_position((self.width/2)-(self.menu_item.width/2),(self.height/2))
         self.baseRenderer = BaseRenderer(pygame, screen)
         self.option_items = []
         self.test = ""
@@ -51,9 +49,6 @@ class SpaceRace():
         if self.state ==  "menu":
             self.menu()
         elif self.state == "game":
-
-            #self.spaceshipX += math.cos(self.rotation/57.29) * self.speed
-            #self.spaceshipY += math.sin(self.rotation/57.29) * self.speed
 
             if self.keys[0] == True:    #Left
                 if self.can_move(self.spaceshipX + self.speed, self.spaceshipY):
@@ -93,7 +88,6 @@ class SpaceRace():
             s = self.menu()
             return s
         elif self.state == "game":
-            print("HENGEL")
             i = event
             if i.type == self.pyg.KEYDOWN:
                 if i.key == self.pyg.K_LEFT:
@@ -128,10 +122,10 @@ class SpaceRace():
 
     def can_move(self, min_x, min_y):
         #TODO: invert X and Y from start, for now just invert here
-        x = 0 - min_x
-        y = 0 - min_y
+        x = math.floor(0 - min_x)
+        y = math.floor(0 - min_y)
 
-        print("x= ", math.floor(x), ", y= ", math.floor(y))
+        print("x= ", x, ", y= ", y)
 
         #x and y not outside track.width and height
         if (x < 0 or x > self.trackWidth - 1):
@@ -140,7 +134,9 @@ class SpaceRace():
         if (y < 0 or y > self.trackHeight - 1):
             return False
 
-        if (self.track_mask.get_at((math.floor(x),math.floor(y))).a) > 0:
+        print(self.track_mask.get_at((x, y)))
+
+        if (self.track_mask.get_at((x, y)).a) > 0:
             return True
         else:
             return False
