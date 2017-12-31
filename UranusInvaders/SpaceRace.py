@@ -72,6 +72,18 @@ class SpaceRace():
                     self.spaceshipY -= self.speed
                 self.rotation = 180
 
+            if self.keys[2] and self.keys[0] == True:   #Up Left
+                self.rotation = 45
+
+            if self.keys[2] and self.keys[1] == True:   #Up Right
+                self.rotation = 315
+
+            if self.keys[3] and self.keys[0] == True:   #Down Left
+                self.rotation = 135
+
+            if self.keys[3] and self.keys[1] == True:   #Down Right
+                self.rotation = 225
+
             self.rotatedimg = self.pyg.transform.rotate(self.spaceship, self.rotation)
             self.screen.blit(self.track, (self.width/2 + self.spaceshipX, self.height/2 + self.spaceshipY))
             self.screen.blit(self.rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
