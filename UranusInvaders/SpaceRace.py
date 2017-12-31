@@ -22,7 +22,7 @@ class SpaceRace():
         self.spaceshipX = -142#(self.width - self.trackWidth)/2
         self.spaceshipY = -487#(self.height - self.trackHeight)/2
         self.rotation = 0
-        self.speed = 0#10
+        self.speed = 10
         self.state = "menu"
         #self.menu_item = MenuItem("Continue", "game", None, 80)
         #self.menu_item.set_position((self.width/2)-(self.menu_item.width/2),(self.height/2))
@@ -52,24 +52,29 @@ class SpaceRace():
             self.menu()
         elif self.state == "game":
 
-            self.spaceshipX += math.cos(self.rotation/57.29) * self.speed
-            self.spaceshipY += math.sin(self.rotation/57.29) * self.speed
-
-            self.rotatedimg = self.pyg.transform.rotate(self.spaceship, self.rotation)
-            self.screen.blit(self.track, (self.width/2 + self.spaceshipX, self.height/2 + self.spaceshipY))
-            self.screen.blit(self.rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
+            #self.spaceshipX += math.cos(self.rotation/57.29) * self.speed
+            #self.spaceshipY += math.sin(self.rotation/57.29) * self.speed
 
             if self.keys[0] == True:    #Left
-                self.rotation = 270
-            if self.keys[1] == True:    #Right
+                if self.can_move(self.spaceshipX + self.speed, self.spaceshipY):
+                    self.spaceshipX += self.speed
                 self.rotation = 90
+            if self.keys[1] == True:    #Right
+                if self.can_move(self.spaceshipX - self.speed, self.spaceshipY):
+                    self.spaceshipX -= self.speed
+                self.rotation = 270
             if self.keys[2] == True:    #Up
                 if self.can_move(self.spaceshipX, self.spaceshipY - self.speed):
                     self.spaceshipY += self.speed
                 self.rotation = 0
             if self.keys[3] == True:    #Down
-                #if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
+                if self.can_move(self.spaceshipX, self.spaceshipY - self.speed):
+                    self.spaceshipY -= self.speed
                 self.rotation = 180
+
+            self.rotatedimg = self.pyg.transform.rotate(self.spaceship, self.rotation)
+            self.screen.blit(self.track, (self.width/2 + self.spaceshipX, self.height/2 + self.spaceshipY))
+            self.screen.blit(self.rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
 
     def run(self, event):       
         if self.state == "menu":
@@ -123,7 +128,7 @@ class SpaceRace():
         if (y < 0 or y > self.trackHeight - 1):
             return False
 
-        if (self.track_mask.get_at((x,y)).a) > 0:
+        if (self.track_mask.get_at((math.floor(x),math.floor(y))).a) > 0:
             return True
         else:
             return False
