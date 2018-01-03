@@ -22,7 +22,9 @@ class SpaceRace():
         self.spaceshipX = -142
         self.spaceshipY = -487
         self.rotation = 0
-        self.speed = 15
+        self.speed = 0
+        self.max_speed = 15
+        self.acceleration = 0.2
         self.state = "menu"
         self.baseRenderer = BaseRenderer(pygame, screen)
         self.option_items = []
@@ -49,6 +51,8 @@ class SpaceRace():
         if self.state ==  "menu":
             self.menu()
         elif self.state == "game":
+
+            self.speed_controll()
 
             if self.keys[0] == True:    #Left
                 if self.can_move(self.spaceshipX + self.speed, self.spaceshipY):
@@ -98,6 +102,8 @@ class SpaceRace():
                     self.keys[2] = True
                 if i.key == self.pyg.K_DOWN:
                     self.keys[3] = True
+                if i.key == self.pyg.K_q:
+                    print("DEBUG")
 
             if i.type == self.pyg.KEYUP:
                 if i.key == self.pyg.K_LEFT:
@@ -108,6 +114,36 @@ class SpaceRace():
                     self.keys[2] = False
                 if i.key == self.pyg.K_DOWN:
                     self.keys[3] = False
+
+    def speed_controll(self):
+        #print(self.speed)
+
+        if self.speed > self.max_speed:
+            self.speed = 15
+
+        if any(k == True for k in self.keys):
+            self.speed += self.acceleration
+
+        if all(k == False for k in self.keys) and self.speed > 0:
+            self.speed -= 0.4
+
+        drag = 0.4
+        if self.speed > 1:
+
+            if self.keys[2] and self.keys[0] == True:   #Up Left
+                self.speed -= drag
+
+            if self.keys[2] and self.keys[1] == True:   #Up Right
+                self.speed -= drag
+
+            if self.keys[3] and self.keys[0] == True:   #Down Left
+                self.speed -= drag
+
+            if self.keys[3] and self.keys[1] == True:   #Down Right
+                self.speed -= drag
+
+        
+        #return
 
     def menu(self):
         for option in self.option_items:
@@ -125,7 +161,7 @@ class SpaceRace():
         x = math.floor(0 - min_x)
         y = math.floor(0 - min_y)
 
-        print("x= ", x, ", y= ", y)
+        #print("x= ", x, ", y= ", y)
 
         #x and y not outside track.width and height
         if (x < 0 or x > self.trackWidth - 1):
@@ -134,7 +170,7 @@ class SpaceRace():
         if (y < 0 or y > self.trackHeight - 1):
             return False
 
-        print(self.track_mask.get_at((x, y)))
+        #print(self.track_mask.get_at((x, y)))
 
         if (self.track_mask.get_at((x, y)).a) > 0:
             return True
