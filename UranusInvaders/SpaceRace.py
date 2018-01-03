@@ -59,7 +59,7 @@ class SpaceRace():
                     self.spaceshipX -= self.speed
                 self.rotation = 270
             if self.keys[2] == True:    #Up
-                if self.can_move(self.spaceshipX, self.spaceshipY - self.speed):
+                if self.can_move(self.spaceshipX, self.spaceshipY + self.speed):
                     self.spaceshipY += self.speed
                 self.rotation = 0
             if self.keys[3] == True:    #Down
