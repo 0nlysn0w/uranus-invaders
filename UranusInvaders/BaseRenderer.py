@@ -21,7 +21,7 @@ class BaseRenderer():
                 if callable(invert_op):
                     self.screen.fill((0, 0, 0))
                     classCalled.background()
-            except :
+            except:
                 pass
 
             for i in self.pyg.event.get():

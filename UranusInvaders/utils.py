@@ -103,11 +103,22 @@ class MenuItem(pygame.font.Font):
         self.pos_y = pos_y
         self.position = pos_x, pos_y
         self.redir = redir
+        self.selected = False
  
     def set_position(self, x, y):
         self.position = (x, y)
         self.pos_x = x
         self.pos_y = y
+
+    def set_selected(self, selected):
+        self.selected = selected
+        if selected:
+            self.set_font_color((255, 0, 0))
+            self.set_italic(True)
+        elif not selected:
+            self.set_font_color((255, 255, 255))
+            self.set_italic(False)
+
  
     def set_font_color(self, rgb_tuple):
         self.font_color = rgb_tuple
@@ -118,3 +129,10 @@ class MenuItem(pygame.font.Font):
             (posy >= self.pos_y and posy <= self.pos_y + self.height):
                 return True
         return False
+
+class MenuItemIndex(MenuItem):
+    def __init__(self, text, redir, index, font=None, font_size=30,
+                 font_color=(255, 255, 255), pos_x = 0, pos_y = 0):
+        MenuItem.__init__(self, text, redir, font=None, font_size=30,
+                 font_color=(255, 255, 255), pos_x = 0, pos_y = 0)
+        self.index = index
