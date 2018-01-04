@@ -23,8 +23,8 @@ class SpaceRace():
         self.spaceshipY = -487
         self.rotation = 0
         self.speed = 0
-        self.max_speed = 15
-        self.acceleration = 0.2
+        self.max_speed = 20
+        self.acceleration = 0.3
         self.state = "menu"
         self.baseRenderer = BaseRenderer(pygame, screen)
         self.option_items = []
@@ -125,7 +125,7 @@ class SpaceRace():
             self.speed += self.acceleration
 
         if all(k == False for k in self.keys) and self.speed > 0:
-            self.speed -= 0.4
+            self.speed -= 0.6
 
         drag = 0.4
         if self.speed > 1:
