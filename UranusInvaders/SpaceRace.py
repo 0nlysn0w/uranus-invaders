@@ -117,6 +117,8 @@ class SpaceRace():
 
     def speed_controll(self):
         #print(self.speed)
+        if self.speed < 0:
+            self.speed = 1
 
         if self.speed > self.max_speed:
             self.speed = 15
@@ -175,6 +177,7 @@ class SpaceRace():
         if (self.track_mask.get_at((x, y)).a) > 0:
             return True
         else:
+            self.speed -= 10
             return False
 
     def game(self, event):
