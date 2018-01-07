@@ -13,7 +13,7 @@ class SpaceRace():
         self.height = pyg.display.Info().current_h
         self.spaceship = pyg.image.load("Assets/spaceship-basic.png")
         self.track = pyg.image.load("Assets/track-2.png")
-        self.track_mask = pyg.image.load("Assets/track-mask-2.png")
+        self.track_mask = pyg.image.load("Assets/track-2.png")
         self.spaceshipWidth = self.spaceship.get_rect().size[0]
         self.spaceshipHeight = self.spaceship.get_rect().size[1]
         self.trackWidth = self.track.get_rect().size[0]
@@ -30,6 +30,8 @@ class SpaceRace():
         self.option_items = []
         self.test = ""
         self.keys = [False, False, False, False]
+        self.red = (255, 0, 0, 255)
+
 
         options = ("Continue", "Option", "Exit")
 
@@ -53,6 +55,7 @@ class SpaceRace():
         elif self.state == "game":
 
             self.speed_controll()
+
 
             if self.keys[0] == True:    #Left
                 if self.can_move(self.spaceshipX + self.speed, self.spaceshipY):
@@ -87,11 +90,20 @@ class SpaceRace():
             self.screen.blit(self.track, (self.width/2 + self.spaceshipX, self.height/2 + self.spaceshipY))
             self.screen.blit(self.rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
 
+            highscore = self.myfont.render("highscore:" + str("BIEM"), 1, (32, 194, 14))
+
+            self.screen.blit(highscore, (100,100))
+
     def run(self, event):       
         if self.state == "menu":
             s = self.menu()
             return s
         elif self.state == "game":
+            X = self.spaceshipX + self.speed
+            Y = self.spaceshipY + self.speed
+            if self.color_code(X, Y).r == 255 and self.color_code(X, Y).g == 0 and self.color_code(X, Y).b == 0:
+                print("RED")
+
             i = event
             if i.type == self.pyg.KEYDOWN:
                 if i.key == self.pyg.K_LEFT:
@@ -166,19 +178,27 @@ class SpaceRace():
         #print("x= ", x, ", y= ", y)
 
         #x and y not outside track.width and height
-        if (x < 0 or x > self.trackWidth - 1):
+        if (x < 0 or x > self.trackWidth - 1 - self.speed):
             return False
 
-        if (y < 0 or y > self.trackHeight - 1):
+        if (y < 0 or y > self.trackHeight - 1 - self.speed):
             return False
 
         #print(self.track_mask.get_at((x, y)))
 
-        if (self.track_mask.get_at((x, y)).a) > 0:
+        if (self.color_code(x, y).a) > 0:
             return True
         else:
             self.speed -= 10
             return False
+
+    def color_code(self, x, y):
+        if str(x)[0] == "-":
+            x = math.floor(0 - x)
+            y = math.floor(0 - y)
+        print(x," ",y)
+        color_code = self.track_mask.get_at((x,y))
+        return color_code
 
     def game(self, event):
         keys = self.pyg.key.get_pressed()
