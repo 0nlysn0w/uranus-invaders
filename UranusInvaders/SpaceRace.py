@@ -1,5 +1,5 @@
-import pygame, sys, math
-from utils import MenuItemIndex
+import pygame, sys, math, time
+from utils import MenuItemIndex, utils, TimerObject
 from BaseRenderer import BaseRenderer
 
 class SpaceRace():
@@ -32,6 +32,10 @@ class SpaceRace():
         self.keys = [False, False, False, False]
         self.red = (255, 0, 0, 255)
 
+        self.start_time = 0
+        #TODO: manage to get the amount of milliseconds from the time or vice versa somehow. This to compare the laptimes to set a bestlaptime and to save the best lap time
+        self.laptime = TimerObject()
+        self.bestlaptime = TimerObject("00:00:000", 0)
 
         options = ("Continue", "Option", "Exit")
 
@@ -90,22 +94,38 @@ class SpaceRace():
             self.screen.blit(self.track, (self.width/2 + self.spaceshipX, self.height/2 + self.spaceshipY))
             self.screen.blit(self.rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
 
-            highscore = self.myfont.render("highscore:" + str("BIEM"), 1, (32, 194, 14))
+            self.laptime = utils.get_elapsed_time(self.start_time)
+            self.disp_laptime = self.myfont.render("Time: " + self.laptime.disp_time, 1, (255, 255, 0))
 
-            self.screen.blit(highscore, (100,100))
+            self.disp_bestlaptime = self.myfont.render("Highscore: " + self.bestlaptime.disp_time, 1, (225, 225, 0))
+
+            self.screen.blit(self.disp_laptime, (20, 20))
+            self.screen.blit(self.disp_bestlaptime, (20, 60))
 
     def run(self, event):       
         if self.state == "menu":
             s = self.menu()
             return s
         elif self.state == "game":
+
+            # Start/Finish stuff
+            #TODO: Somehow manage to register every time the ship crosses the finish
             X = self.spaceshipX + self.speed
             Y = self.spaceshipY + self.speed
             if self.color_code(X, Y).r == 255 and self.color_code(X, Y).g == 0 and self.color_code(X, Y).b == 0:
-                print("RED")
+                print("LAP")
+                print("BESTLAPTIME ",self.bestlaptime.millis)
+
+                if self.bestlaptime.millis == 0:
+                    self.bestlaptime.disp_time = self.laptime.disp_time
+                    self.start_time = 0
+
 
             i = event
             if i.type == self.pyg.KEYDOWN:
+                if self.start_time == 0:
+                    self.start_time = utils.start_timer()
+
                 if i.key == self.pyg.K_LEFT:
                     self.keys[0] = True
                 if i.key == self.pyg.K_RIGHT:
@@ -126,22 +146,22 @@ class SpaceRace():
                     self.keys[2] = False
                 if i.key == self.pyg.K_DOWN:
                     self.keys[3] = False
-
+    
     def speed_controll(self):
         #print(self.speed)
+        drag = 0.5
         if self.speed < 0:
             self.speed = 1
 
         if self.speed > self.max_speed:
-            self.speed = 15
+            self.speed = self.max_speed
 
         if any(k == True for k in self.keys):
             self.speed += self.acceleration
 
         if all(k == False for k in self.keys) and self.speed > 0:
-            self.speed -= 0.6
+            self.speed -= drag
 
-        drag = 0.4
         if self.speed > 1:
 
             if self.keys[2] and self.keys[0] == True:   #Up Left
@@ -155,9 +175,6 @@ class SpaceRace():
 
             if self.keys[3] and self.keys[1] == True:   #Down Right
                 self.speed -= drag
-
-        
-        #return
 
     def menu(self):
         for option in self.option_items:
@@ -196,7 +213,7 @@ class SpaceRace():
         if str(x)[0] == "-":
             x = math.floor(0 - x)
             y = math.floor(0 - y)
-        print(x," ",y)
+        #print(x," ",y)
         color_code = self.track_mask.get_at((x,y))
         return color_code
 
