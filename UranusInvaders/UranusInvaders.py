@@ -42,7 +42,7 @@ if __name__ == "__main__":
             baseRenderer.run("AlienSlayer", "AlienSlayer")
             state = "main"
         elif state == "kelvin":
-            baseRenderer.run("TrafficMadness", "TrafficMadness")
+            baseRenderer.run("AlienRoad", "AlienRoad")
             state = "main"
         elif state == "main":
             state = baseRenderer.run("GameMenu", "GameMenu")
