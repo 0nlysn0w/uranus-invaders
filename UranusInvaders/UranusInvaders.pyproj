@@ -30,17 +30,22 @@
     <Compile Include="BaseRenderer.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="constants.py" />
     <Compile Include="Frogger.py" />
     <Compile Include="GameMenu.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="levels.py" />
     <Compile Include="PlanetarySurvival.py" />
+    <Compile Include="platforms.py" />
+    <Compile Include="player.py" />
     <Compile Include="SpaceInvaders.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SpaceRace.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="spritesheet_functions.py" />
     <Compile Include="TrafficMadness.py">
       <SubType>Code</SubType>
     </Compile>

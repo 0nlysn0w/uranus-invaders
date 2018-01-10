@@ -117,4 +117,4 @@ class PlanetarySurvival():
 
         # Be IDLE friendly. If you forget this line, the program will 'hang'
         # on exit.
-        pygame.quit()
+        return "return=main"

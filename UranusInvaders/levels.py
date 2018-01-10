@@ -4,6 +4,7 @@ import constants
 import platforms
 import random
 import math
+from platforms import Enemy
 
 enemies = []
 x = y = 0
@@ -168,6 +169,17 @@ class Level_01(Level):
         block = platforms.MovingPlatform(platforms.STONE_PLATFORM_MIDDLE)
         block.rect.x = 1250
         block.rect.y = 380
+        block.boundary_left = 1250
+        block.boundary_right = 1600
+        block.change_x = 1
+        block.player = self.player
+        block.level = self
+        self.platform_list.add(block)
+
+        # Add a custom moving Enemy
+        block = platforms.MovingEnemy(Enemy)
+        block.rect.x = 1250
+        block.rect.y = 180
         block.boundary_left = 1250
         block.boundary_right = 1600
         block.change_x = 1
