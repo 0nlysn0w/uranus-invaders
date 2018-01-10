@@ -33,9 +33,10 @@ class SpaceRace():
         self.red = (255, 0, 0, 255)
 
         self.start_time = 0
-        #TODO: manage to get the amount of milliseconds from the time or vice versa somehow. This to compare the laptimes to set a bestlaptime and to save the best lap time
         self.laptime = TimerObject()
         self.bestlaptime = TimerObject("00:00:000", 0)
+
+        self.laps = 0
 
         options = ("Continue", "Option", "Exit")
 
@@ -99,8 +100,11 @@ class SpaceRace():
 
             self.disp_bestlaptime = self.myfont.render("Highscore: " + self.bestlaptime.disp_time, 1, (225, 225, 0))
 
+            self.disp_laps = self.myfont.render("Laps: " + str(self.laps), 1, (225, 225, 0))
+
             self.screen.blit(self.disp_laptime, (20, 20))
             self.screen.blit(self.disp_bestlaptime, (20, 60))
+            self.screen.blit(self.disp_laps, (20, 100))
 
     def run(self, event):       
         if self.state == "menu":
@@ -118,9 +122,10 @@ class SpaceRace():
                     self.bestlaptime.millis = self.laptime.millis
                     self.bestlaptime.disp_time = self.laptime.disp_time
                     self.start_time = 0
+                    self.laps += 1
 
                 print("LAP")
-                print("BESTLAPTIME ",self.bestlaptime.millis)
+                print("BESTLAPTIME: ",self.bestlaptime.disp_time)
 
 
 
