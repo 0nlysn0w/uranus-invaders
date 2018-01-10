@@ -20,8 +20,12 @@ class BaseRenderer():
                 invert_op = getattr(classCalled, "background", None)
                 if callable(invert_op):
                     self.screen.fill((0, 0, 0))
-                    classCalled.background()
-            except:
+                    m = classCalled.background()
+                    if m != None:
+                        state,value = m.split("=")
+                        if state == "return":
+                            return value
+            except :
                 pass
 
             for i in self.pyg.event.get():
