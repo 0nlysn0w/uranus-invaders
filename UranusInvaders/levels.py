@@ -2,6 +2,11 @@ import pygame
 
 import constants
 import platforms
+import random
+import math
+
+enemies = []
+x = y = 0
 
 class Level():
     """ This is a generic super-class used to define a level.
@@ -74,27 +79,79 @@ class Level_01(Level):
         self.background.set_colorkey(constants.WHITE)
         self.level_limit = -2500
 
-        self.surface = pygame.image.load("Assets/dirt-surface-0001.png").convert()
-
         # Array with type of platform, and x, y location of the platform.
-        level = [ [platforms.GRASS_LEFT, 1000, 500],
-                  [platforms.GRASS_MIDDLE, 1032, 500],
-                  [platforms.GRASS_RIGHT, 1064, 500],
-                  [platforms.GRASS_LEFT, 800, 700],
-                  [platforms.GRASS_MIDDLE, 832, 700],
-                  [platforms.GRASS_RIGHT, 864, 700],
-                  [platforms.GRASS_LEFT, 600, 500],
-                  [platforms.GRASS_MIDDLE, 632, 500],
-                  [platforms.GRASS_RIGHT, 664, 500],
-                  [platforms.GRASS_LEFT, 400, 700],
-                  [platforms.GRASS_MIDDLE, 432, 700],
-                  [platforms.GRASS_RIGHT, 464, 700],
-                  [platforms.GRASS_LEFT, 200, 500],
-                  [platforms.GRASS_MIDDLE, 232, 500],
-                  [platforms.GRASS_RIGHT, 264, 500],
-                  [platforms.STONE_PLATFORM_LEFT, 1120, 380],
-                  [platforms.STONE_PLATFORM_MIDDLE, 1152, 380],
-                  [platforms.STONE_PLATFORM_RIGHT, 1184, 380],
+        level = [ [platforms.GRASS_LEFT, 400, 550],
+                  [platforms.GRASS_MIDDLE, 400, 518],
+                  [platforms.GRASS_MIDDLE, 400, 486],
+                  [platforms.GRASS_MIDDLE, 400, 454],
+                  [platforms.GRASS_MIDDLE, 400, 422],
+                  [platforms.GRASS_MIDDLE, 400, 390],
+                  [platforms.GRASS_MIDDLE, 400, 358],
+                  [platforms.GRASS_MIDDLE, 400, 326],
+                  [platforms.GRASS_MIDDLE, 400, 294],
+                  [platforms.GRASS_MIDDLE, 400, 262],
+                  [platforms.GRASS_MIDDLE, 400, 230],
+                  [platforms.GRASS_MIDDLE, 400, 198],
+                  [platforms.GRASS_MIDDLE, 400, 166],
+                  [platforms.GRASS_MIDDLE, 400, 134],
+                  [platforms.GRASS_MIDDLE, 400, 102],
+                  [platforms.GRASS_MIDDLE, 400, 70],
+                  [platforms.GRASS_MIDDLE, 400, 38],
+                  [platforms.GRASS_MIDDLE, 400, 6],
+                  [platforms.GRASS_MIDDLE, 400, -26],
+                  [platforms.GRASS_MIDDLE, 432, 550],
+                  [platforms.GRASS_MIDDLE, 464, 550],
+                  [platforms.GRASS_MIDDLE, 496, 550],
+                  [platforms.GRASS_MIDDLE, 528, 550],
+                  [platforms.GRASS_MIDDLE, 560, 550],
+                  [platforms.GRASS_MIDDLE, 592, 550],
+                  [platforms.GRASS_MIDDLE, 624, 550],
+                  [platforms.GRASS_MIDDLE, 656, 550],
+                  [platforms.GRASS_MIDDLE, 688, 550],
+                  [platforms.GRASS_MIDDLE, 720, 550],
+                  [platforms.GRASS_MIDDLE, 752, 550],
+                  [platforms.GRASS_MIDDLE, 784, 550],
+                  [platforms.GRASS_MIDDLE, 816, 550],
+                  [platforms.GRASS_RIGHT, 848, 550],
+                  [platforms.STONE_PLATFORM_LEFT, 1008, 486],
+                  [platforms.STONE_PLATFORM_MIDDLE, 1040, 486],
+                  [platforms.STONE_PLATFORM_RIGHT, 1072, 486],
+                  [platforms.STONE_PLATFORM_LEFT, 1136, 380],
+                  [platforms.STONE_PLATFORM_MIDDLE, 1168, 380],
+                  [platforms.STONE_PLATFORM_RIGHT, 1200, 380],
+                  [platforms.STONE_PLATFORM_LEFT, 1680, 348],
+                  [platforms.STONE_PLATFORM_MIDDLE, 1712, 348],
+                  [platforms.STONE_PLATFORM_RIGHT, 1744, 348],
+                  [platforms.GRASS_LEFT, 1904, 550],
+                  [platforms.GRASS_MIDDLE, 1904, 518],
+                  [platforms.GRASS_MIDDLE, 1904, 486],
+                  [platforms.GRASS_MIDDLE, 1936, 550],
+                  [platforms.GRASS_MIDDLE, 1968, 550],
+                  [platforms.GRASS_MIDDLE, 2000, 518],
+                  [platforms.GRASS_MIDDLE, 2000, 486],
+                  [platforms.GRASS_MIDDLE, 2000, 550],
+                  [platforms.GRASS_MIDDLE, 2032, 550],
+                  [platforms.GRASS_MIDDLE, 2064, 550],
+                  [platforms.GRASS_MIDDLE, 2096, 550],
+                  [platforms.GRASS_MIDDLE, 2096, 518],
+                  [platforms.GRASS_MIDDLE, 2096, 486],
+                  [platforms.GRASS_MIDDLE, 2128, 550],
+                  [platforms.GRASS_MIDDLE, 2160, 550],
+                  [platforms.GRASS_MIDDLE, 2192, 550],
+                  [platforms.GRASS_MIDDLE, 2192, 518],
+                  [platforms.GRASS_MIDDLE, 2192, 486],
+                  [platforms.GRASS_MIDDLE, 2224, 550],
+                  [platforms.GRASS_MIDDLE, 2256, 550],
+                  [platforms.GRASS_MIDDLE, 2288, 550],
+                  [platforms.GRASS_MIDDLE, 2288, 518],
+                  [platforms.GRASS_MIDDLE, 2288, 486],
+                  [platforms.GRASS_RIGHT, 2320, 550],
+                  [platforms.GRASS_LEFT, 2400, 454],
+                  [platforms.GRASS_MIDDLE, 2432, 454],
+                  [platforms.GRASS_RIGHT, 2464, 454],
+                  [platforms.GRASS_LEFT, 2600, 370],
+                  [platforms.GRASS_MIDDLE, 2632, 370],
+                  [platforms.GRASS_RIGHT, 2664, 370],
                   ]
 
 
@@ -118,13 +175,12 @@ class Level_01(Level):
         block.level = self
         self.platform_list.add(block)
 
-
 # Create platforms for the level
 class Level_02(Level):
     """ Definition for level 2. """
 
     def __init__(self, player):
-        """ Create level 1. """
+        """ Create level 2. """
 
         # Call the parent constructor
         Level.__init__(self, player)
@@ -136,9 +192,9 @@ class Level_02(Level):
         self.surface = pygame.image.load("Assets/dirt-surface-0001.png").convert()
 
         # Array with type of platform, and x, y location of the platform.
-        level = [ [platforms.STONE_PLATFORM_LEFT, 500, 550],
-                  [platforms.STONE_PLATFORM_MIDDLE, 570, 550],
-                  [platforms.STONE_PLATFORM_RIGHT, 640, 550],
+        level = [ [platforms.STONE_PLATFORM_LEFT, 30, 550],
+                  [platforms.STONE_PLATFORM_MIDDLE, 370, 550],
+                  [platforms.STONE_PLATFORM_RIGHT, 440, 550],
                   [platforms.GRASS_LEFT, 800, 400],
                   [platforms.GRASS_MIDDLE, 870, 400],
                   [platforms.GRASS_RIGHT, 940, 400],
