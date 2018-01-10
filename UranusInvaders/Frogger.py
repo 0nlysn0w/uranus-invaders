@@ -174,7 +174,7 @@ def wait_for_input():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                terminate()
+                return "return=main"
             elif event.type == pygame.KEYDOWN:
                 if event.key in valid_keys:
                     # Return to wherever we were called from.
@@ -187,7 +187,9 @@ def pause():
     window.blit(pause_label, (180, 300))
     pygame.display.flip()
     print ("paused")
-    wait_for_input()
+    m = wait_for_input()
+    if m == "return=main":
+        return m
 
 
 def game_over():
@@ -334,7 +336,9 @@ def main():
                 return "return=main"
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    pause()
+                    m = pause()
+                    if m == "return=main":
+                        return m
                 if event.key == pygame.K_SPACE:
 #                     level += 1
                    print (frog.rect.x, frog.rect.y)

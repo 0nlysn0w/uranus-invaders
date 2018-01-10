@@ -60,6 +60,7 @@
     <Content Include="Assets\save.json" />
     <Content Include="Assets\spaceship-basic.png" />
     <Content Include="Assets\track-1.png" />
+    <Content Include="Assets\explosion.png" />
     <Content Include="Assets\Wheatley.png" />
     <Content Include="Data\alligator_sprites.png" />
     <Content Include="Data\background.png" />
