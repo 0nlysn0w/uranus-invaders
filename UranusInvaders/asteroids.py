@@ -125,7 +125,7 @@ class Asteroids(pygame.font.Font):
 
             return
 
-        asteroid = AsteroidObject(self.pyg).newAsteroid()
+        asteroid = AsteroidObject(self.pyg, self.score).newAsteroid()
         if asteroid != None:
             self.asteroids.append(asteroid)
         
@@ -238,13 +238,15 @@ class Asteroids(pygame.font.Font):
             utils.saveMinigame("highscore", self.score, "asteroids")
 
 class AsteroidObject(pygame.sprite.Sprite):
-    def __init__(self, pyg):
+    def __init__(self, pyg, score):
+        speedIncrease = (score // 500)
+        print(speedIncrease)
         pyg.sprite.Sprite.__init__(self)
         self.pyg = pyg
         self._asteroidMedium = pyg.image.load("Assets/asteroid_1.png")
         self._asteroidSmall = pyg.image.load("Assets/asteroid_2.png")
         self.asteroidChance = 20
-        self.speed = 5
+        self.speed = 5 + speedIncrease
         self.x = 0
         self.y = 0
         self.image = ""
