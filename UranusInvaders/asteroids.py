@@ -174,6 +174,8 @@ class Asteroids(pygame.font.Font):
                 self.exploded = x
 
         for x in removeAsteroids:
+            if x == self.exploded:
+                self.exploded = None
             self.asteroids.remove(x)
         
         lifes = self.myfont.render("lifes:" + str(self.lifes), 1, (32, 194, 14))
