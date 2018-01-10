@@ -50,7 +50,7 @@ class Camper(StaticObstacle):
 
 class MovingObstacle(pygame.sprite.Sprite):
     "Base class for all moving obstacles"
-    def __init__(self, x, y, img, direction):
+    def __init__(self, x, y, img, direction, screen):
         super(MovingObstacle, self).__init__()
         self.speed = 2
         self.go_left = direction
@@ -59,6 +59,7 @@ class MovingObstacle(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.mask = pygame.mask.from_surface(self.img)
+        self.screen = screen
 
     def draw(self):
         "Moves and then draws the obstacle"
@@ -87,20 +88,20 @@ class MovingObstacle(pygame.sprite.Sprite):
 
 class Car(MovingObstacle):
 
-    def __init__(self, x, y, img, direction=0):
-        super(Car, self).__init__(x, y, img, direction)
+    def __init__(self, x, y, img, screen, direction=0):
+        super(Car, self).__init__(x, y, img, direction, screen)
 
 
 class Turtle(MovingObstacle):
 
-    def __init__(self, x, y, img, direction=0):
-        super(Turtle, self).__init__(x, y, img, direction)
+    def __init__(self, x, y, img, screen, direction=0):
+        super(Turtle, self).__init__(x, y, img, direction, screen)
 
 
 class Log(MovingObstacle):
 
-    def __init__(self, x, y, img, direction=0):
-        super(Log, self).__init__(x, y, img, direction)
+    def __init__(self, x, y, img, screen, direction=0):
+        super(Log, self).__init__(x, y, img, direction, screen)
 
 
 class Frog(pygame.sprite.Sprite):
@@ -124,6 +125,7 @@ class Frog(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.img)
         self.myfont = pygame.font.SysFont("monospace", 30)
         self.window = pygame.display.set_mode((480, 600), 0, 32)
+        self.meep = AlienRoad(pyg, screen)
 
     def main(self, event):
         #self.start_screen()
@@ -136,9 +138,9 @@ class Frog(pygame.sprite.Sprite):
 
         # Sprite groups
         frog = Frog(pygame, self.screen )
-        hostiles = create_hostiles()
-        floatables = create_floatables()
-        deathzones = create_deathzones()
+        hostiles = self.create_hostiles()
+        floatables = self.create_floatables()
+        deathzones = self.create_deathzones()
 
 
         while True:
@@ -330,73 +332,73 @@ class AlienRoad():
         #pygame.mixer.music.fadeout(2000)
 
 
-    def create_floatables():
+    def create_floatables(self):
         "Create the Turtle and Log instances"
         floatables = pygame.sprite.Group()
         ys = [128, 160, 208, 248, 280]
         x = 0
         for _ in range(4):
-            turtle = Turtle(x, ys[4], "Assets/turtle_3_full.png", 1)
+            turtle = Turtle(x, ys[4], "Assets/turtle_3_full.png", self.screen, 1)
             floatables.add(turtle)
             x += 128
         x = 20
         for _ in range(3):
-            log = Log(x, ys[3], "Assets/log_small.png")
+            log = Log(x, ys[3], "Assets/log_small.png", self.screen)
             floatables.add(log)
             x += 192
         x = 40
         for _ in range(2):
-            log = Log(x, ys[2], "Assets/log_big.png")
+            log = Log(x, ys[2], "Assets/log_big.png", self.screen)
             floatables.add(log)
             x += 256
         x = 60
         for _ in range(4):
-            turtle = Turtle(x, ys[1], "Assets/turtle_2_full.png", 1)
+            turtle = Turtle(x, ys[1], "Assets/turtle_2_full.png", self.screen, 1)
             floatables.add(turtle)
             x += 112
         x = 80
         for _ in range(3):
-            log = Log(x, ys[0], "Assets/log_medium.png")
+            log = Log(x, ys[0], "Assets/log_medium.png", self.screen)
             floatables.add(log)
             x += 176
 
         return floatables
 
 
-    def create_hostiles():
+    def create_hostiles(self):
         "Create the obstacles that trigger death on collision"
         hostiles = pygame.sprite.Group()
         ys = [520, 480, 440, 400, 360]
         x = randrange(200)
         for _ in range(3):
-            car = Car(x, ys[0], "Assets/car_1.png", 1)
+            car = Car(x, ys[0], "Assets/car_1.png", self.screen, 1)
             hostiles.add(car)
             x += 144
         x = randrange(200)
         for _ in range(3):
-            car = Car(x, ys[1], "Assets/car_2.png")
+            car = Car(x, ys[1], "Assets/car_2.png", self.screen)
             hostiles.add(car)
             x += 128
         x = randrange(200)
         for _ in range(3):
-            car = Car(x, ys[2], "Assets/car_3.png", 1)
+            car = Car(x, ys[2], "Assets/car_3.png", self.screen, 1)
             hostiles.add(car)
             x += 128
         x = randrange(200)
         for _ in range(2):
-            car = Car(x, ys[3], "Assets/car_4.png")
+            car = Car(x, ys[3], "Assets/car_4.png", self.screen)
             hostiles.add(car)
             x += 128
         x = randrange(200)
         for _ in range(2):
-            car = Car(x, ys[4], "Assets/car_5.png", 1)
+            car = Car(x, ys[4], "Assets/car_5.png", self.screen, 1)
             hostiles.add(car)
             x += 176
 
         return hostiles
 
 
-    def create_deathzones():
+    def create_deathzones(self):
 
         deathzones = pygame.sprite.Group()
 
