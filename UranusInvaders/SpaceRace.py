@@ -114,15 +114,15 @@ class SpaceRace():
 
             # Start/Finish stuff
             #TODO: Somehow manage to register every time the ship crosses the finish
-            X = self.spaceshipX + self.speed
-            Y = self.spaceshipY + self.speed
+            X = self.spaceshipX #+ self.speed
+            Y = self.spaceshipY #+ self.speed
             if self.color_code(X, Y).r == 255 and self.color_code(X, Y).g == 0 and self.color_code(X, Y).b == 0:
 
                 if self.laptime.millis < self.bestlaptime.millis or self.bestlaptime.millis == 0:
                     self.bestlaptime.millis = self.laptime.millis
                     self.bestlaptime.disp_time = self.laptime.disp_time
-                    self.start_time = 0
-                    self.laps += 1
+                self.start_time = 0
+                self.laps += 1
 
                 print("LAP")
                 print("BESTLAPTIME: ",self.bestlaptime.disp_time)
