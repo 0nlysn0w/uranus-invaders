@@ -30,6 +30,7 @@
     <Compile Include="BaseRenderer.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Frogger.py" />
     <Compile Include="GameMenu.py">
       <SubType>Code</SubType>
     </Compile>
@@ -50,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\" />
+    <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Asteroid_1.png" />
@@ -59,6 +61,55 @@
     <Content Include="Assets\spaceship-basic.png" />
     <Content Include="Assets\track-1.png" />
     <Content Include="Assets\Wheatley.png" />
+    <Content Include="Data\alligator_sprites.png" />
+    <Content Include="Data\background.png" />
+    <Content Include="Data\bonus_sprites.png" />
+    <Content Include="Data\bottom_ground.png" />
+    <Content Include="Data\car_1.png" />
+    <Content Include="Data\car_2.png" />
+    <Content Include="Data\car_3.png" />
+    <Content Include="Data\car_4.png" />
+    <Content Include="Data\car_5.png" />
+    <Content Include="Data\car_sprites.png" />
+    <Content Include="Data\croc.png" />
+    <Content Include="Data\empty.png" />
+    <Content Include="Data\emulogic.ttf" />
+    <Content Include="Data\fly.png" />
+    <Content Include="Data\frog.png" />
+    <Content Include="Data\frogger_sheet.png" />
+    <Content Include="Data\frogger_title.gif" />
+    <Content Include="Data\frog_back.png" />
+    <Content Include="Data\frog_back_jump.png" />
+    <Content Include="Data\frog_death_1.png" />
+    <Content Include="Data\frog_death_2.png" />
+    <Content Include="Data\frog_death_3.png" />
+    <Content Include="Data\frog_jump.png" />
+    <Content Include="Data\frog_left.png" />
+    <Content Include="Data\frog_left_jump.png" />
+    <Content Include="Data\frog_right.png" />
+    <Content Include="Data\frog_safe.png" />
+    <Content Include="Data\frog_sprites.png" />
+    <Content Include="Data\lives.png" />
+    <Content Include="Data\log_big.png" />
+    <Content Include="Data\log_medium.png" />
+    <Content Include="Data\log_small.png" />
+    <Content Include="Data\shore_sprite.png" />
+    <Content Include="Data\theme.mp3" />
+    <Content Include="Data\top_ground.png" />
+    <Content Include="Data\tree_big.png" />
+    <Content Include="Data\tree_medium.png" />
+    <Content Include="Data\tree_small.png" />
+    <Content Include="Data\truck.png" />
+    <Content Include="Data\turtle_2_full.png" />
+    <Content Include="Data\turtle_2_half.png" />
+    <Content Include="Data\turtle_2_quarter.png" />
+    <Content Include="Data\turtle_2_sprites.png" />
+    <Content Include="Data\turtle_2_zero.png" />
+    <Content Include="Data\turtle_3_full.png" />
+    <Content Include="Data\turtle_3_half.png" />
+    <Content Include="Data\turtle_3_quarter.png" />
+    <Content Include="Data\turtle_3_sprites.png" />
+    <Content Include="Data\turtle_3_zero.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
