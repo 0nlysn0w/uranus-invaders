@@ -98,17 +98,20 @@ class SpaceRace():
             self.rotatedimg = self.pyg.transform.rotate(self.spaceship, self.rotation)
             self.screen.blit(self.track, (self.width/2 + self.spaceshipX, self.height/2 + self.spaceshipY))
 
-            startX = 454 + self.spaceshipX
-            startY = 787 + self.spaceshipY
+            startfinishX = 454 + self.spaceshipX
+            startfinishY = 787 + self.spaceshipY
 
-            self.screen.blit(self.startfinish, (startX, startY))
-            self.screen.blit(self.can_lap_checker, (startX, startY+100))
+            can_lap_checkerX = 2221 + self.spaceshipX
+            can_lap_checkerY = 787 + self.spaceshipY
+
+            self.screen.blit(self.startfinish, (startfinishX, startfinishY))
+            self.screen.blit(self.can_lap_checker, (can_lap_checkerX, can_lap_checkerY))
 
             self.screen.blit(self.rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
 
-            startfinish_hit = utils.collisionDetect(self.startfinish, startX, startY, self.rotatedimg, (self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2), self.speed)
+            startfinish_hit = utils.collisionDetect(self.startfinish, startfinishX, startfinishY, self.rotatedimg, (self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2), self.speed)
 
-            can_lap_checker_hit = utils.collisionDetect(self.can_lap_checker, startX, startY+100, self.rotatedimg, (self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2), self.speed)
+            can_lap_checker_hit = utils.collisionDetect(self.can_lap_checker, can_lap_checkerX, can_lap_checkerY, self.rotatedimg, (self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2), self.speed)
             
             if can_lap_checker_hit == True:
                 self.can_lap = True
