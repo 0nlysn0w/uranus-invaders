@@ -14,6 +14,8 @@ class SpaceRace():
         self.spaceship = pyg.image.load("Assets/spaceship-basic.png")
         self.track = pyg.image.load("Assets/track-2.png")
         self.track_mask = pyg.image.load("Assets/track-2.png")
+        self.startfinish = pyg.image.load("Assets/startfinish.png")
+        self.can_lap_checker = pyg.image.load("Assets/startfinish.png")
         self.spaceshipWidth = self.spaceship.get_rect().size[0]
         self.spaceshipHeight = self.spaceship.get_rect().size[1]
         self.trackWidth = self.track.get_rect().size[0]
@@ -37,6 +39,8 @@ class SpaceRace():
         self.bestlaptime = TimerObject("00:00:000", 0)
 
         self.laps = 0
+
+        self.can_lap = False
 
         options = ("Continue", "Option", "Exit")
 
@@ -93,9 +97,33 @@ class SpaceRace():
 
             self.rotatedimg = self.pyg.transform.rotate(self.spaceship, self.rotation)
             self.screen.blit(self.track, (self.width/2 + self.spaceshipX, self.height/2 + self.spaceshipY))
+
+            startX = 454 + self.spaceshipX
+            startY = 787 + self.spaceshipY
+
+            self.screen.blit(self.startfinish, (startX, startY))
+            self.screen.blit(self.can_lap_checker, (startX, startY+100))
+
             self.screen.blit(self.rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
 
+            startfinish_hit = utils.collisionDetect(self.startfinish, startX, startY, self.rotatedimg, (self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2), self.speed)
+
+            can_lap_checker_hit = utils.collisionDetect(self.can_lap_checker, startX, startY+100, self.rotatedimg, (self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2), self.speed)
+            
+            if can_lap_checker_hit == True:
+                self.can_lap = True
+
             self.laptime = utils.get_elapsed_time(self.start_time)
+
+            if startfinish_hit == True and self.can_lap == True:
+                if self.laptime.millis < self.bestlaptime.millis or self.bestlaptime.millis == 0:
+                    self.bestlaptime.millis = self.laptime.millis
+                    self.bestlaptime.disp_time = self.laptime.disp_time
+                self.start_time = 0
+                self.laps += 1
+                print("LAP")
+                self.can_lap = False
+
             self.disp_laptime = self.myfont.render("Time: " + self.laptime.disp_time, 1, (255, 255, 0))
 
             self.disp_bestlaptime = self.myfont.render("Highscore: " + self.bestlaptime.disp_time, 1, (225, 225, 0))
@@ -111,22 +139,6 @@ class SpaceRace():
             s = self.menu()
             return s
         elif self.state == "game":
-
-            # Start/Finish stuff
-            #TODO: Somehow manage to register every time the ship crosses the finish
-            X = self.spaceshipX #+ self.speed
-            Y = self.spaceshipY #+ self.speed
-            if self.color_code(X, Y).r == 255 and self.color_code(X, Y).g == 0 and self.color_code(X, Y).b == 0:
-
-                if self.laptime.millis < self.bestlaptime.millis or self.bestlaptime.millis == 0:
-                    self.bestlaptime.millis = self.laptime.millis
-                    self.bestlaptime.disp_time = self.laptime.disp_time
-                self.start_time = 0
-                self.laps += 1
-
-                print("LAP")
-                print("BESTLAPTIME: ",self.bestlaptime.disp_time)
-
 
 
             i = event

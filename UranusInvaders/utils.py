@@ -40,7 +40,7 @@ class utils:
         return x, y
         #To call this function you need to call it like this: x, y = utils.move(self.pyg, x, y, self.speed)
 
-    def collisionDetect(firstSprite, firstX, firstY, secondSprite, secondX, secondY):
+    def collisionDetect(firstSprite, firstX, firstY, secondSprite, secondX, secondY, speed=None):
         firstSpriteX = firstSprite.get_rect().size[0] + firstX
         firstSpriteY = firstSprite.get_rect().size[1] + firstY
 
@@ -48,9 +48,15 @@ class utils:
         secondSpriteY = secondSprite.get_rect().size[1] + secondY
         secondSpriteY = math.ceil(secondSpriteY)
 
-        rX = range(firstX, firstSpriteX)
-        rY = range(firstY, firstSpriteY)
-        if (secondX in rX or secondSpriteX in rX) and (secondY in rY or secondSpriteY in rY):
+        rX = range(math.floor(firstX), math.ceil(firstSpriteX))
+        rY = range(math.floor(firstY), math.ceil(firstSpriteY))
+
+        if speed:
+            rX = range(math.floor(firstX), math.ceil(firstSpriteX + speed))
+            rY = range(math.floor(firstY), math.ceil(firstSpriteY + speed))
+
+        lY = range(math.floor(secondY), math.ceil(secondSpriteY))
+        if (secondX in rX or secondSpriteX in rX) and ((secondY in rY or secondSpriteY in rY) or (firstY in lY or firstSpriteY in lY)):
             return True
         else:
             return False
