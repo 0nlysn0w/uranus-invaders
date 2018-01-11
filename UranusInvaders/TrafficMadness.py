@@ -5,7 +5,6 @@ class TrafficMadness():
         self.pyg = pyg
         self.myfont = self.pyg.font.SysFont("monospace", 30)
         self.screen = screen
-        self.wheatley = pyg.image.load("Assets/Wheatley.png")
         self.m = Frogger.start()
 
     def background(self):
