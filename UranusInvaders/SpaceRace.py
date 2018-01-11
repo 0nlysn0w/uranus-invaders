@@ -1,5 +1,5 @@
-import pygame, sys, math
-from utils import MenuItemIndex
+import pygame, sys, math, time
+from utils import MenuItemIndex, utils, TimerObject
 from BaseRenderer import BaseRenderer
 
 class SpaceRace():
@@ -13,7 +13,9 @@ class SpaceRace():
         self.height = pyg.display.Info().current_h
         self.spaceship = pyg.image.load("Assets/spaceship-basic.png")
         self.track = pyg.image.load("Assets/track-2.png")
-        self.track_mask = pyg.image.load("Assets/track-mask-2.png")
+        self.track_mask = pyg.image.load("Assets/track-2.png")
+        self.startfinish = pyg.image.load("Assets/startfinish.png")
+        self.can_lap_checker = pyg.image.load("Assets/startfinish.png")
         self.spaceshipWidth = self.spaceship.get_rect().size[0]
         self.spaceshipHeight = self.spaceship.get_rect().size[1]
         self.trackWidth = self.track.get_rect().size[0]
@@ -30,6 +32,15 @@ class SpaceRace():
         self.option_items = []
         self.test = ""
         self.keys = [False, False, False, False]
+        self.red = (255, 0, 0, 255)
+
+        self.start_time = 0
+        self.laptime = TimerObject()
+        self.bestlaptime = TimerObject("00:00:000", 0)
+
+        self.laps = 0
+
+        self.can_lap = False
 
         options = ("Continue", "Option", "Exit")
 
@@ -53,6 +64,7 @@ class SpaceRace():
         elif self.state == "game":
 
             self.speed_controll()
+
 
             if self.keys[0] == True:    #Left
                 if self.can_move(self.spaceshipX + self.speed, self.spaceshipY):
@@ -85,15 +97,55 @@ class SpaceRace():
 
             self.rotatedimg = self.pyg.transform.rotate(self.spaceship, self.rotation)
             self.screen.blit(self.track, (self.width/2 + self.spaceshipX, self.height/2 + self.spaceshipY))
+
+            startX = 454 + self.spaceshipX
+            startY = 787 + self.spaceshipY
+
+            self.screen.blit(self.startfinish, (startX, startY))
+            self.screen.blit(self.can_lap_checker, (startX, startY+100))
+
             self.screen.blit(self.rotatedimg, ((self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2)))
+
+            startfinish_hit = utils.collisionDetect(self.startfinish, startX, startY, self.rotatedimg, (self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2), self.speed)
+
+            can_lap_checker_hit = utils.collisionDetect(self.can_lap_checker, startX, startY+100, self.rotatedimg, (self.width / 2) - (self.spaceshipWidth/2), (self.height / 2) - (self.spaceshipHeight/2), self.speed)
+            
+            if can_lap_checker_hit == True:
+                self.can_lap = True
+
+            self.laptime = utils.get_elapsed_time(self.start_time)
+
+            if startfinish_hit == True and self.can_lap == True:
+                if self.laptime.millis < self.bestlaptime.millis or self.bestlaptime.millis == 0:
+                    self.bestlaptime.millis = self.laptime.millis
+                    self.bestlaptime.disp_time = self.laptime.disp_time
+                self.start_time = 0
+                self.laps += 1
+                print("LAP")
+                self.can_lap = False
+
+            self.disp_laptime = self.myfont.render("Time: " + self.laptime.disp_time, 1, (255, 255, 0))
+
+            self.disp_bestlaptime = self.myfont.render("Highscore: " + self.bestlaptime.disp_time, 1, (225, 225, 0))
+
+            self.disp_laps = self.myfont.render("Laps: " + str(self.laps), 1, (225, 225, 0))
+
+            self.screen.blit(self.disp_laptime, (20, 20))
+            self.screen.blit(self.disp_bestlaptime, (20, 60))
+            self.screen.blit(self.disp_laps, (20, 100))
 
     def run(self, event):       
         if self.state == "menu":
             s = self.menu()
             return s
         elif self.state == "game":
+
+
             i = event
             if i.type == self.pyg.KEYDOWN:
+                if self.start_time == 0:
+                    self.start_time = utils.start_timer()
+
                 if i.key == self.pyg.K_LEFT:
                     self.keys[0] = True
                 if i.key == self.pyg.K_RIGHT:
@@ -114,20 +166,22 @@ class SpaceRace():
                     self.keys[2] = False
                 if i.key == self.pyg.K_DOWN:
                     self.keys[3] = False
-
+    
     def speed_controll(self):
         #print(self.speed)
+        drag = 0.5
+        if self.speed < 0:
+            self.speed = 1
 
         if self.speed > self.max_speed:
-            self.speed = 15
+            self.speed = self.max_speed
 
         if any(k == True for k in self.keys):
             self.speed += self.acceleration
 
         if all(k == False for k in self.keys) and self.speed > 0:
-            self.speed -= 0.6
+            self.speed -= drag
 
-        drag = 0.4
         if self.speed > 1:
 
             if self.keys[2] and self.keys[0] == True:   #Up Left
@@ -141,9 +195,6 @@ class SpaceRace():
 
             if self.keys[3] and self.keys[1] == True:   #Down Right
                 self.speed -= drag
-
-        
-        #return
 
     def menu(self):
         for option in self.option_items:
@@ -164,18 +215,27 @@ class SpaceRace():
         #print("x= ", x, ", y= ", y)
 
         #x and y not outside track.width and height
-        if (x < 0 or x > self.trackWidth - 1):
+        if (x < 0 or x > self.trackWidth - 1 - self.speed):
             return False
 
-        if (y < 0 or y > self.trackHeight - 1):
+        if (y < 0 or y > self.trackHeight - 1 - self.speed):
             return False
 
         #print(self.track_mask.get_at((x, y)))
 
-        if (self.track_mask.get_at((x, y)).a) > 0:
+        if (self.color_code(x, y).a) > 0:
             return True
         else:
+            self.speed -= 10
             return False
+
+    def color_code(self, x, y):
+        if str(x)[0] == "-":
+            x = math.floor(0 - x)
+            y = math.floor(0 - y)
+        #print(x," ",y)
+        color_code = self.track_mask.get_at((x,y))
+        return color_code
 
     def game(self, event):
         keys = self.pyg.key.get_pressed()
