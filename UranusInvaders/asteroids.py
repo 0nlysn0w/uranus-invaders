@@ -1,7 +1,7 @@
-import random
 import pygame
 from utils import utils
 from GameMenu import MenuItem
+import random
 
 class Asteroids(pygame.font.Font):
     def __init__(self, pyg, screen):
