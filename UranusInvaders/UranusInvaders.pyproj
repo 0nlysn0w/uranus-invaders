@@ -39,6 +39,7 @@
     <Compile Include="PlanetarySurvival.py" />
     <Compile Include="platforms.py" />
     <Compile Include="player.py" />
+    <Compile Include="SpaceInv.py" />
     <Compile Include="SpaceInvaders.py">
       <SubType>Code</SubType>
     </Compile>

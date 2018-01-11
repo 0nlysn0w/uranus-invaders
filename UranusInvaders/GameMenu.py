@@ -11,10 +11,10 @@ class GameMenu():
         self.items = []
 
         #The names of the menu items, if you change this the text on screen changes
-        items = ("Space Invaders", "Asteroids", "Alien Slayer", "Planetary Survival", "Traffic madness on Uranus", "Space Race", "Quit")
+        items = ("Space Invaders", "Asteroids", "Planetary Survival", "Traffic madness on Uranus", "Space Race", "Quit")
 
         #The name of the state which determines which minigame it'll load
-        redir = ("tim", "ramon", "floris", "jurian", "kelvin", "joost", "quit")
+        redir = ("tim", "ramon", "jurian", "kelvin", "joost", "quit")
         
         for index, item in enumerate(items):
             menu_item = MenuItem(item, redir[index])

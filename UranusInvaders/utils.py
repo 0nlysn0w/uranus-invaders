@@ -1,6 +1,7 @@
 import json
 import math
 import pygame
+import time
 class utils:
     def inScreen(pyg, x, y, sprite):
         width = pyg.display.Info().current_w
@@ -39,7 +40,6 @@ class utils:
         return x, y
         #To call this function you need to call it like this: x, y = utils.move(self.pyg, x, y, self.speed)
 
-
     def movebugfixed(pyg, x, y, speed, keys):
         if keys[0]:
             x -= speed
@@ -55,7 +55,7 @@ class utils:
         
         return x, y
 
-    def collisionDetect(firstSprite, firstX, firstY, secondSprite, secondX, secondY):
+    def collisionDetect(firstSprite, firstX, firstY, secondSprite, secondX, secondY, speed=None):
         firstSpriteX = firstSprite.get_rect().size[0] + firstX
         firstSpriteY = firstSprite.get_rect().size[1] + firstY
 
@@ -63,9 +63,15 @@ class utils:
         secondSpriteY = secondSprite.get_rect().size[1] + secondY
         secondSpriteY = math.ceil(secondSpriteY)
 
-        rX = range(firstX, firstSpriteX)
-        rY = range(firstY, firstSpriteY)
-        if (secondX in rX or secondSpriteX in rX) and (secondY in rY or secondSpriteY in rY):
+        rX = range(math.floor(firstX), math.ceil(firstSpriteX))
+        rY = range(math.floor(firstY), math.ceil(firstSpriteY))
+
+        if speed:
+            rX = range(math.floor(firstX), math.ceil(firstSpriteX + speed))
+            rY = range(math.floor(firstY), math.ceil(firstSpriteY + speed))
+
+        lY = range(math.floor(secondY), math.ceil(secondSpriteY))
+        if (secondX in rX or secondSpriteX in rX) and ((secondY in rY or secondSpriteY in rY) or (firstY in lY or firstSpriteY in lY)):
             return True
         else:
             return False
@@ -103,6 +109,45 @@ class utils:
 
         openfile = open("Assets/save.json", "w")
         json.dump(tmp, openfile)
+
+    def start_timer():
+        start_time = time.time()
+        return start_time
+
+    #I know, I know....
+    def get_elapsed_time(start_time):
+        if start_time == 0:
+            return TimerObject("00:00:000", 0)
+        elapsed = time.time() - start_time
+        millis = int(round(elapsed * 1000))
+
+        mil = str(millis%1000)
+        sec = math.floor(millis/1000)%60
+        min = math.floor(math.floor(millis/1000)/60)
+
+        milzero = "000"
+        millength = 3-(len(mil))
+        mil = milzero[0:millength] + mil
+
+        seczero = "00"
+        seclength = 2-(len(str(sec)))
+        sec = seczero[0:seclength] + str(sec)
+
+        minzero = "00"
+        minlength = 2-(len(str(min)))
+        min = minzero[0:minlength] + str(min)
+
+        elapsed_time = TimerObject()
+        elapsed_time.disp_time = str(min) + ":" + sec + ":" + mil
+        elapsed_time.millis = millis
+
+        return elapsed_time
+
+class TimerObject():
+    def __init__(self, disp_time=None, millis=None):
+        self.disp_time = disp_time
+        self.millis = millis
+
 
 class MenuItem(pygame.font.Font):
     def __init__(self, text, redir, font=None, font_size=30,
