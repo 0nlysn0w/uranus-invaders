@@ -21,9 +21,6 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AlienSlayer.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Asteroids.py">
       <SubType>Code</SubType>
     </Compile>
@@ -35,10 +32,7 @@
     <Compile Include="GameMenu.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="levels.py" />
     <Compile Include="PlanetarySurvival.py" />
-    <Compile Include="platforms.py" />
-    <Compile Include="player.py" />
     <Compile Include="SpaceInv.py" />
     <Compile Include="SpaceInvaders.py">
       <SubType>Code</SubType>

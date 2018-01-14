@@ -1,3 +1,4 @@
+# Game of Tim van Keulen
 import SpaceInv
 class SpaceInvaders():
     def __init__(self, pyg, screen):

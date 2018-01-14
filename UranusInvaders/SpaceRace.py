@@ -1,3 +1,4 @@
+# Game of Joost Stam
 import pygame, sys, math, time
 from utils import MenuItemIndex, utils, TimerObject
 from BaseRenderer import BaseRenderer

@@ -1,3 +1,4 @@
+# Game of Kelvin van Dam
 import pygame
 import sys
 from random import choice, randrange
