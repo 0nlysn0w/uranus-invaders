@@ -5,12 +5,14 @@ import random, os.path
 #import basic pygame modules
 import pygame
 from pygame.locals import *
+from utils import utils
+from GameMenu import MenuItem
 
 #game constants
-MAX_SHOTS = 2      #most player bullets onscreen
-ALIEN_ODDS = 15     #chances a new alien appears
-BOMB_ODDS = 70    #chances a new bomb will drop
-ALIEN_RELOAD = 12     #frames between new aliens
+MAX_SHOTS = 3    #most player bullets onscreen
+ALIEN_ODDS = 10     #chances a new alien appears
+BOMB_ODDS = 15    #chances a new bomb will drop
+ALIEN_RELOAD = 3     #frames between new aliens
 SCREENRECT = Rect(0, 0, 640, 480)
 SCORE = 0
 
@@ -146,12 +148,20 @@ class Score(pygame.sprite.Sprite):
         self.lastscore = -1
         self.update()
         self.rect = self.image.get_rect().move(10, 450)
+        self.highscore = utils.loadObject("highscore", "spaceinvaders")
 
     def update(self):
         if SCORE != self.lastscore:
             self.lastscore = SCORE
             msg = "Score: %d" % SCORE
+            msgHi = "High Score: %d" % utils.loadObject("highscore", "spaceinvaders");
+
             self.image = self.font.render(msg, 0, self.color)
+            self.highscore = self.font.render(msgHi, 0, self.color)
+
+            if SCORE > utils.loadObject("highscore", "spaceinvaders"):
+                self.highscore = SCORE
+                utils.saveMinigame("highscore", SCORE, "spaceinvaders")
 
 
 
@@ -163,6 +173,7 @@ def main(winstyle = 0):
     winstyle = 0  # |FULLSCREEN
     bestdepth = pygame.display.mode_ok(SCREENRECT.size, winstyle, 32)
     screen = pygame.display.set_mode(SCREENRECT.size, winstyle, bestdepth)
+
 
     #Load images, assign to sprite classes
     #(do this before the classes are used, after screen setup)
@@ -188,6 +199,8 @@ def main(winstyle = 0):
     for x in range(0, SCREENRECT.width, bgdtile.get_width()):
         background.blit(bgdtile, (x, 0))
     screen.blit(background, (0,0))
+
+
     pygame.display.flip()
 
     # Initialize Game Groups
@@ -217,7 +230,6 @@ def main(winstyle = 0):
     Alien() #note, this 'lives' because it goes into a sprite group
     if pygame.font:
         all.add(Score())
-
 
     while player.alive():
 
@@ -269,12 +281,19 @@ def main(winstyle = 0):
             Explosion(bomb)
             player.kill()
 
-        #draw the scene
+        msgHi = "High Score: %d" % utils.loadObject("highscore", "spaceinvaders");
+        highscoremsg = MenuItem(msgHi, "none", None, 20, (255, 255, 0))
+        pos_x = (100 / 2) - (highscoremsg.width / 2)
+        pos_y = (860 / 2) - (highscoremsg.height / 2)
+        highscoremsg.set_position(pos_x, pos_y)
+        screen.blit(highscoremsg.label, highscoremsg.position)
+
+
         dirty = all.draw(screen)
         pygame.display.update(dirty)
 
-        #cap the framerate
-        clock.tick(30)
+        #framerate
+        clock.tick(40)
 
     if pygame.mixer:
         pygame.mixer.music.fadeout(1000)
