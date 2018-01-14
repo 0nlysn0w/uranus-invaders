@@ -14,6 +14,20 @@ STONE_PLATFORM_LEFT   = (128, 32, 32, 32)
 STONE_PLATFORM_MIDDLE = (128, 0, 32, 32)
 STONE_PLATFORM_RIGHT  = (128, 64, 32, 32)
 
+#lvl 2 materials
+NETHER_LEFT            = (32, 32, 32, 32)
+NETHER_RIGHT           = (32, 64, 32, 32)
+NETHER_MIDDLE          = (32, 0, 32, 32)
+NETHER_DIRT_LEFT            = (32, 128, 32, 32)
+NETHER_DIRT_RIGHT           = (32, 160, 32, 32)
+NETHER_DIRT_MIDDLE          = (32, 96, 32, 32)
+BLUE_LEFT            = (64, 32, 32, 32)
+BLUE_RIGHT           = (64, 64, 32, 32)
+BLUE_MIDDLE          = (64, 0, 32, 32)
+BLUE_DIRT_LEFT            = (64, 128, 32, 32)
+BLUE_DIRT_RIGHT           = (64, 160, 32, 32)
+BLUE_DIRT_MIDDLE          = (64, 96, 32, 32)
+
 class PlanetarySurvival():
     def __init__(self, pyg, screen):
         #Hier kan je plaatjes inladen en in self.{NAAM} zetten en in de run functie dan weer gebruiken, dit zorgt ervoor dat je tijdens het spelen niets hoeft in te laden
@@ -29,7 +43,7 @@ class PlanetarySurvival():
         self.height = self.rect.size[1]
         self.x = (self.screenWidth - self.width)/2
         self.y = (self.screenHeight - self.height)/2
-
+        self.status = ""
         items = ("Start", "How to play", "Quit")
         redir = ("game", "htp", "quit")
         for index, item in enumerate(items):
@@ -48,7 +62,6 @@ class PlanetarySurvival():
         quit = self.render("press ESC to go back to the main menu", 1, (255,255,0))
         self.screen.blit(label, (100, 100))
         self.screen.blit(quit, (100, 500))
-        self.screen.blit(self.wheatley, (300, 100))
 
     def run(self, event):
         """ Main Program """
@@ -125,6 +138,15 @@ class PlanetarySurvival():
                 player.rect.left = 400
                 current_level.shift_world(diff)
 
+            if player.rect.y == 536:
+                return "return=main"
+
+            if player.rect.y > 536:
+                print(self.status)
+                if self.status == "return=main":
+                    print('it returns it indeeddd')
+                    return self.status
+
             # If the player gets to the end of the level, go to the next level
             current_position = player.rect.x + current_level.world_shift
             if current_position < current_level.level_limit:
@@ -148,6 +170,9 @@ class PlanetarySurvival():
 
         # Be IDLE friendly. If you forget this line, the program will 'hang'
         # on exit.
+        return "return=main"
+
+    def test(self):
         return "return=main"
 
     def menu(self):
@@ -219,6 +244,33 @@ class Platform(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
 
+class Finish(pygame.sprite.Sprite):
+    def __init__(self, sprite_sheet_data):
+        """ Platform constructor. Assumes constructed with user passing in
+            an array of 5 numbers like what's defined at the top of this
+            code. """
+        super().__init__()
+
+
+        self.image = pygame.image.load("Assets/finish.png")
+        self.rect = self.image.get_rect()
+
+class SolidFinish(Finish):
+    def __init__(self, sprite_sheet_data):
+
+        super().__init__(sprite_sheet_data)
+
+        self.change_x = 0
+        self.change_y = 0
+
+        self.boundary_top = 0
+        self.boundary_bottom = 0
+        self.boundary_left = 0
+        self.boundary_right = 0
+
+        self.level = None
+        self.player = None
+
 class Enemy(pygame.sprite.Sprite):
     """ Platform the user can jump on """
 
@@ -232,6 +284,42 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.image.load("Assets/spaceship-0002.png")
         self.rect = self.image.get_rect()
 
+class SolidFinish2(Finish):
+    def __init__(self, sprite_sheet_data):
+
+        super().__init__(sprite_sheet_data)
+
+        self.change_x = 0
+        self.change_y = 0
+
+        self.boundary_top = 0
+        self.boundary_bottom = 0
+        self.boundary_left = 0
+        self.boundary_right = 0
+
+        self.level = None
+        self.player = None
+
+    def update(self):
+        """ Move the platform.
+            If the player is in the way, it will shove the player
+            out of the way. This does NOT handle what happens if a
+            platform shoves a player into another object. Make sure
+            moving platforms have clearance to push the player around
+            or add code to handle what happens if they don't. """
+
+
+        # Move left/right
+        self.rect.x += self.change_x
+
+        # See if we hit the player
+        hit = pygame.sprite.collide_rect(self, self.player)
+        if hit:
+            pygame.quit()
+
+        hit = pygame.sprite.collide_rect(self, self.player)
+        if hit:
+            pygame.quit()
 
 class MovingPlatform(Platform):
     """ This is a fancier platform that can actually move. """
@@ -309,8 +397,13 @@ class MovingEnemy(Enemy):
 
         super().__init__(sprite_sheet_data)
 
+        self.pyg = pygame
         self.change_x = 0
         self.change_y = 0
+        self.screenWidth = pygame.display.Info().current_w
+        self.screenHeight = pygame.display.Info().current_h
+        self.size = [constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT]
+        self.screen = pygame.display.set_mode(self.size)
 
         self.boundary_top = 0
         self.boundary_bottom = 0
@@ -332,17 +425,18 @@ class MovingEnemy(Enemy):
 
         # Move left/right
         self.rect.x += self.change_x
-        if self.change_x == -1 and self.flipped == False:
+        if self.change_x < 0 and self.flipped == False:
             self.image = pygame.transform.rotate( self.image, 180)
             self.flipped = True
 
-        if self.change_x == 1 and self.flipped == True:
+        if self.change_x > 0 and self.flipped == True:
             self.flipped = False
             self.image = pygame.transform.rotate( self.image, 180)
 
         # See if we hit the player
         hit = pygame.sprite.collide_rect(self, self.player)
         if hit:
+            pygame.quit()
             # We did hit the player. Shove the player around and
             # assume he/she won't hit anything else.
 
@@ -361,7 +455,7 @@ class MovingEnemy(Enemy):
         # Check and see if we the player
         hit = pygame.sprite.collide_rect(self, self.player)
         if hit:
-            print('hello hit very hard on top or ondertop')
+            pygame.quit()
             # We did hit the player. Shove the player around and
             # assume he/she won't hit anything else.
 
@@ -554,7 +648,7 @@ class Level():
 
         # How far this world has been scrolled left/right
         self.world_shift = 0
-        self.level_limit = -1000
+        self.level_limit = -2500
         self.platform_list = pygame.sprite.Group()
         self.enemy_list = pygame.sprite.Group()
         self.player = player
@@ -682,6 +776,16 @@ class Level_01(Level):
                   [GRASS_LEFT, 2800, 450],
                   [GRASS_MIDDLE, 2832, 450],
                   [GRASS_RIGHT, 2864, 450],
+                  [STONE_PLATFORM_LEFT, 3000, 500],
+                  [STONE_PLATFORM_MIDDLE, 3032, 500],
+                  [STONE_PLATFORM_RIGHT, 3064, 500],
+                  [STONE_PLATFORM_LEFT, 3132, 400],
+                  [STONE_PLATFORM_MIDDLE, 3164, 400],
+                  [STONE_PLATFORM_MIDDLE, 3196, 400],
+                  [STONE_PLATFORM_MIDDLE, 3228, 400],
+                  [STONE_PLATFORM_MIDDLE, 3260, 400],
+                  [STONE_PLATFORM_MIDDLE, 3292, 400],
+                  [STONE_PLATFORM_RIGHT, 3324, 400],
                   ]
 
 
@@ -700,7 +804,7 @@ class Level_01(Level):
         block.rect.y = 380
         block.boundary_left = 1250
         block.boundary_right = 1600
-        block.change_x = 1
+        block.change_x = 2
         block.player = self.player
         block.level = self
         self.platform_list.add(block)
@@ -715,6 +819,24 @@ class Level_01(Level):
         block.player = self.player
         block.level = self
         self.platform_list.add(block)
+
+        # enemy 2
+        block = MovingEnemy(Enemy)
+        block.rect.x = 2864
+        block.rect.y = 400
+        block.boundary_left = 2400
+        block.boundary_right = 2864
+        block.change_x = 3
+        block.player = self.player
+        block.level = self
+        self.platform_list.add(block)
+
+        finish = SolidFinish(Finish)
+        finish.rect.x = 3330
+        finish.rect.y = 336
+        finish.player = self.player
+        finish.level = self
+        self.platform_list.add(finish)
 
 # Create platforms for the level
 class Level_02(Level):
@@ -733,18 +855,67 @@ class Level_02(Level):
         self.surface = pygame.image.load("Assets/dirt-surface-0001.png").convert()
 
         # Array with type of platform, and x, y location of the platform.
-        level = [ [STONE_PLATFORM_LEFT, 30, 550],
-                  [STONE_PLATFORM_MIDDLE, 370, 550],
-                  [STONE_PLATFORM_RIGHT, 440, 550],
-                  [GRASS_LEFT, 800, 400],
-                  [GRASS_MIDDLE, 870, 400],
-                  [GRASS_RIGHT, 940, 400],
-                  [GRASS_LEFT, 1000, 500],
-                  [GRASS_MIDDLE, 1070, 500],
-                  [GRASS_RIGHT, 1140, 500],
-                  [STONE_PLATFORM_LEFT, 1120, 280],
-                  [STONE_PLATFORM_MIDDLE, 1190, 280],
-                  [STONE_PLATFORM_RIGHT, 1260, 280],
+        level = [ [NETHER_DIRT_LEFT, 0, 550],
+                  [NETHER_DIRT_MIDDLE, 0, 518],
+                  [NETHER_DIRT_MIDDLE, 0, 486],
+                  [NETHER_DIRT_MIDDLE, 0, 454],
+                  [NETHER_DIRT_MIDDLE, 0, 422],
+                  [NETHER_DIRT_MIDDLE, 0, 390],
+                  [NETHER_DIRT_MIDDLE, 0, 358],
+                  [NETHER_DIRT_MIDDLE, 0, 326],
+                  [NETHER_DIRT_MIDDLE, 0, 294],
+                  [NETHER_DIRT_MIDDLE, 0, 262],
+                  [NETHER_DIRT_MIDDLE, 0, 230],
+                  [NETHER_DIRT_MIDDLE, 0, 198],
+                  [NETHER_DIRT_MIDDLE, 0, 166],
+                  [NETHER_DIRT_MIDDLE, 0, 134],
+                  [NETHER_DIRT_MIDDLE, 0, 102],
+                  [NETHER_DIRT_MIDDLE, 0, 70],
+                  [NETHER_DIRT_MIDDLE, 0, 38],
+                  [NETHER_DIRT_MIDDLE, 0, 6],
+                  [NETHER_MIDDLE, 0, -26],
+                  [NETHER_MIDDLE, 32, 550],
+                  [NETHER_MIDDLE, 64, 550],
+                  [NETHER_MIDDLE, 96, 550],
+                  [NETHER_MIDDLE, 128, 550],
+                  [NETHER_MIDDLE, 160, 550],
+                  [NETHER_MIDDLE, 192, 550],
+                  [NETHER_MIDDLE, 224, 550],
+                  [NETHER_RIGHT, 256, 550],
+                  [NETHER_DIRT_MIDDLE, 700, 582],
+                  [NETHER_DIRT_MIDDLE, 700, 550],
+                  [NETHER_DIRT_MIDDLE, 700, 518],
+                  [NETHER_DIRT_MIDDLE, 700, 486],
+                  [NETHER_DIRT_MIDDLE, 700, 454],
+                  [NETHER_DIRT_MIDDLE, 700, 422],
+                  [NETHER_DIRT_MIDDLE, 700, 390],
+                  [NETHER_DIRT_MIDDLE, 700, 358],
+                  [NETHER_DIRT_MIDDLE, 700, 326],
+                  [NETHER_DIRT_MIDDLE, 700, 294],
+                  [NETHER_DIRT_MIDDLE, 700, 262],
+                  [NETHER_DIRT_MIDDLE, 700, 230],
+                  [NETHER_MIDDLE, 700, 198],
+                  [NETHER_DIRT_MIDDLE, 700, 70],
+                  [NETHER_DIRT_MIDDLE, 700, 38],
+                  [NETHER_MIDDLE, 700, 6],
+                  [BLUE_DIRT_MIDDLE, 1100, 582],
+                  [BLUE_DIRT_MIDDLE, 1100, 550],
+                  [BLUE_MIDDLE, 1100, 518],
+                  [BLUE_DIRT_MIDDLE, 1100, 390],
+                  [BLUE_DIRT_MIDDLE, 1100, 358],
+                  [BLUE_DIRT_MIDDLE, 1100, 326],
+                  [BLUE_DIRT_MIDDLE, 1100, 294],
+                  [BLUE_DIRT_MIDDLE, 1100, 262],
+                  [BLUE_DIRT_MIDDLE, 1100, 230],
+                  [BLUE_DIRT_MIDDLE, 1100, 198],
+                  [BLUE_DIRT_MIDDLE, 1100, 166],
+                  [BLUE_DIRT_MIDDLE, 1100, 134],
+                  [BLUE_DIRT_MIDDLE, 1100, 102],
+                  [BLUE_DIRT_MIDDLE, 1100, 70],
+                  [BLUE_DIRT_MIDDLE, 1100, 38],
+                  [BLUE_MIDDLE, 1100, 6],
+                  [BLUE_MIDDLE, 1132, 518],
+                  [BLUE_MIDDLE, 1164, 518],
                   ]
 
 
@@ -757,15 +928,52 @@ class Level_02(Level):
             self.platform_list.add(block)
 
         # Add a custom moving platform
-        block = MovingPlatform(STONE_PLATFORM_MIDDLE)
-        block.rect.x = 1500
-        block.rect.y = 300
-        block.boundary_top = 100
-        block.boundary_bottom = 550
+        block = MovingPlatform(NETHER_MIDDLE)
+        block.rect.x = 400
+        block.rect.y = 1
+        block.boundary_top = 0
+        block.boundary_bottom = 530
         block.change_y = -1
         block.player = self.player
         block.level = self
         self.platform_list.add(block)
+
+        block2 = MovingPlatform(NETHER_MIDDLE)
+        block2.rect.x = 600
+        block2.rect.y = 480
+        block2.boundary_top = 0
+        block2.boundary_bottom = 532
+        block2.change_y = -1
+        block2.player = self.player
+        block2.level = self
+        self.platform_list.add(block2)
+
+        block = MovingPlatform(BLUE_MIDDLE)
+        block.rect.x = 800
+        block.rect.y = 1
+        block.boundary_top = 0
+        block.boundary_bottom = 500
+        block.change_y = -1
+        block.player = self.player
+        block.level = self
+        self.platform_list.add(block)
+
+        block2 = MovingPlatform(BLUE_MIDDLE)
+        block2.rect.x = 1000
+        block2.rect.y = 480
+        block2.boundary_top = 0
+        block2.boundary_bottom = 532
+        block2.change_y = -1
+        block2.player = self.player
+        block2.level = self
+        self.platform_list.add(block2)
+
+        finish = SolidFinish2(Finish)
+        finish.rect.x = 1164
+        finish.rect.y = 454
+        finish.player = self.player
+        finish.level = self
+        self.platform_list.add(finish)
 
 class SpriteSheet(object):
     """ Class used to grab images out of a sprite sheet. """
