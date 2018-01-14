@@ -11,7 +11,7 @@ class GameMenu():
         self.items = []
 
         #The names of the menu items, if you change this the text on screen changes
-        items = ("Space Invaders", "Asteroids", "Planetary Survival", "Traffic madness on Uranus", "Space Race", "Quit")
+        items = ("Space Invaders", "Asteroids", "Planetary Survival", "Alien Road", "Space Race", "Quit")
 
         #The name of the state which determines which minigame it'll load
         redir = ("tim", "ramon", "jurian", "kelvin", "joost", "quit")
