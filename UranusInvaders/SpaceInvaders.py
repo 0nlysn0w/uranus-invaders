@@ -10,6 +10,7 @@ class SpaceInvaders():
 
     def background(self):
         if self.m == "return=main":
+            self.pyg.display.set_mode((800, 600))
             self.pyg.mouse.set_visible(True)
             return self.m
 
