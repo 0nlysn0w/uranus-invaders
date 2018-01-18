@@ -33,8 +33,8 @@ class Asteroids(pygame.font.Font):
         self.exploded = None
         self.keys = [False, False, False, False]
 
-        items = ("Start", "How to play", "Quit")
-        redir = ("game", "htp", "quit")
+        items = ("Start", "Quit")
+        redir = ("game", "quit")
         for index, item in enumerate(items):
             menu_item = MenuItem(item, redir[index])
  
